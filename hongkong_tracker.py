@@ -20,66 +20,61 @@ def fetch_page():
     return r.text
 
 
-def extract_shows_array(html):
-    """Find the JSON array for 'shows' using bracket counting."""
-    start = html.find('"shows":[')
-    if start == -1:
-        return None
-    start = html.find('[', start)
-    if start == -1:
-        return None
-
-    stack = 0
-    i = start
-    while i < len(html):
-        ch = html[i]
-        if ch == '[':
-            stack += 1
-        elif ch == ']':
-            stack -= 1
-            if stack == 0:
-                end = i + 1
-                break
-        i += 1
-
-    if stack != 0:
-        return None
-
-    array_str = html[start:end]
-    try:
-        return json.loads(array_str)
-    except json.JSONDecodeError:
-        return None
-
-
-def parse_shows_from_array(shows_array):
-    shows = []
-    for show in shows_array:
+def extract_chunks(html):
+    chunks = []
+    # Capture the JSON string inside self.__next_f.push([1, "..."]); 
+    pattern = r'self\.__next_f\.push\(\[1,\s*"((?:[^"\\]|\\.)*?)"\)'
+    for match in re.findall(pattern, html, re.S):
         try:
-            show_id = show["id"]
-            date = show["date"][:10]
-            time = show["time"][11:16] if len(show["time"]) >= 16 else show["time"]
-            price = show["price"]
-            seats = show["seats"]
-            sold = show["sold"]
-            movie = show["movie"]["name"]
-            venue = show.get("site", {}).get("name", "Cinema.com.hk")
-            shows.append({
-                "perfIx": show_id,
-                "movie": movie,
-                "venue": venue,
-                "date": date,
-                "time": time,
-                "total": seats,
-                "available": seats - sold,
-                "blocked": 0,
-                "sold": sold,
-                "gross": sold * price,
-                "price": price,
-                "last_updated": RUN_TIME
-            })
-        except KeyError:
-            continue
+            data = json.loads(match)
+            chunks.append(data)
+        except json.JSONDecodeError as e:
+            print(f"JSON decode error: {e}")
+    return chunks
+
+
+def parse_shows(chunks):
+    shows = []
+
+    def search_shows(obj):
+        if isinstance(obj, dict):
+            for key, value in obj.items():
+                if key == "shows" and isinstance(value, list):
+                    for show in value:
+                        try:
+                            show_id = show["id"]
+                            date = show["date"][:10]
+                            time = show["time"][11:16] if len(show["time"]) >= 16 else show["time"]
+                            price = show["price"]
+                            seats = show["seats"]
+                            sold = show["sold"]
+                            movie = show["movie"]["name"]
+                            venue = show.get("site", {}).get("name", "Cinema.com.hk")
+                            shows.append({
+                                "perfIx": show_id,
+                                "movie": movie,
+                                "venue": venue,
+                                "date": date,
+                                "time": time,
+                                "total": seats,
+                                "available": seats - sold,
+                                "blocked": 0,
+                                "sold": sold,
+                                "gross": sold * price,
+                                "price": price,
+                                "last_updated": RUN_TIME
+                            })
+                        except KeyError:
+                            continue
+                else:
+                    search_shows(value)
+        elif isinstance(obj, list):
+            for item in obj:
+                search_shows(item)
+
+    for chunk in chunks:
+        search_shows(chunk)
+
     return shows
 
 
@@ -195,14 +190,10 @@ def generate_monthly():
 
 def main():
     html = fetch_page()
-    shows_array = extract_shows_array(html)
-    if shows_array is None:
-        print("Could not find shows array. Check HTML structure.")
-        return
-
-    shows = parse_shows_from_array(shows_array)
+    chunks = extract_chunks(html)
+    print(f"Extracted {len(chunks)} chunks")
+    shows = parse_shows(chunks)
     print("Shows scraped:", len(shows))
-
     if shows:
         save_daily(shows)
         save_logs(shows)
