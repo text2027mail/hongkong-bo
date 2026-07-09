@@ -6,7 +6,24 @@ from zoneinfo import ZoneInfo
 from collections import defaultdict
 
 URL = "https://www.cinema.com.hk/en/movie/ticketing"
-HEADERS = {"User-Agent": "Mozilla/5.0"}
+
+HEADERS = {
+    "authority": "www.cinema.com.hk",
+    "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
+    "accept-encoding": "gzip, deflate, br, zstd",
+    "accept-language": "en-IN,en-GB;q=0.9,en-US;q=0.8,en;q=0.7",
+    "cache-control": "no-cache",
+    "pragma": "no-cache",
+    "sec-ch-ua": '"Google Chrome";v="149", "Chromium";v="149", "Not)A;Brand";v="24"',
+    "sec-ch-ua-mobile": "?1",
+    "sec-ch-ua-platform": '"iOS"',
+    "sec-fetch-dest": "document",
+    "sec-fetch-mode": "navigate",
+    "sec-fetch-site": "same-origin",
+    "sec-fetch-user": "?1",
+    "upgrade-insecure-requests": "1",
+    "user-agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 18_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.5 Mobile/15E148 Safari/604.1"
+}
 
 IST_TZ = ZoneInfo("Asia/Kolkata")
 RUN_TIME = datetime.now(IST_TZ).strftime("%Y-%m-%d %I:%M:%S %p IST")
@@ -19,41 +36,33 @@ def fetch_page():
 
 
 def extract_shows_array(html):
-    """
-    Find the JSON array for 'shows' using bracket counting.
-    Searches for the literal "shows": in the HTML.
-    """
-    # Look for "shows": (with quotes) in the HTML
-    # In the raw HTML, it is \"shows\":, but the backslash is an escape character in JSON,
-    # so in the HTML text it's actually a backslash and a quote. We search for the sequence.
-    # Let's search for the literal substring: "shows": (double quote, shows, double quote, colon)
-    # But since the HTML has backslashes, we need to search for the raw bytes? No.
-    # In Python, when we read the HTML, the backslashes are present. So we can search for:
-    # start = html.find('"shows":')
-    # But because it's escaped in the JSON string, it's actually '"shows":'? Actually the HTML
-    # contains the characters: backslash, double quote, shows, double quote, colon.
-    # So the literal substring is \ "shows": but with a backslash.
-    # We'll search for both possibilities: with and without backslash.
-    start = html.find('"shows":')
+    # Try different patterns to locate the shows array
+    patterns = [
+        '"shows":',
+        '\\"shows\\":',
+        'shows":',
+    ]
+    start = -1
+    for pat in patterns:
+        start = html.find(pat)
+        if start != -1:
+            break
     if start == -1:
-        # Try with backslash
-        start = html.find('\\"shows\\":')
-        if start == -1:
-            return None
+        print("Could not find 'shows' key in HTML.")
+        return None
 
-    # We found the key, now find the colon and then the '[' that starts the array
+    # Find the colon after the key
     colon = html.find(':', start)
     if colon == -1:
         return None
-
-    # Find the '[' after the colon
-    bracket_start = html.find('[', colon)
-    if bracket_start == -1:
+    # Find the first '[' after colon
+    bracket = html.find('[', colon)
+    if bracket == -1:
         return None
 
-    # Now extract the array using bracket counting
+    # Extract array using bracket counting, handling strings and escapes
     stack = 0
-    i = bracket_start
+    i = bracket
     in_string = False
     escape = False
     while i < len(html):
@@ -62,7 +71,7 @@ def extract_shows_array(html):
             escape = False
         elif ch == '\\':
             escape = True
-        elif ch == '"':
+        elif ch == '"' and not escape:
             in_string = not in_string
         elif not in_string:
             if ch == '[':
@@ -74,14 +83,16 @@ def extract_shows_array(html):
                     break
         i += 1
     else:
+        print("No matching closing bracket found for shows array.")
         return None
 
-    array_str = html[bracket_start:end]
+    array_str = html[bracket:end]
     try:
         return json.loads(array_str)
-    except json.JSONDecodeError:
-        # The array might have escaped characters, but json.loads should handle it if it's proper JSON.
-        # If not, maybe we need to unescape, but let's just return None.
+    except json.JSONDecodeError as e:
+        print(f"Failed to parse shows array: {e}")
+        # Print snippet for debugging
+        print("Array snippet:", array_str[:500])
         return None
 
 
@@ -111,7 +122,8 @@ def parse_shows_from_array(shows_array):
                 "price": price,
                 "last_updated": RUN_TIME
             })
-        except KeyError:
+        except KeyError as e:
+            print(f"Skipping show due to missing key: {e}")
             continue
     return shows
 
@@ -228,9 +240,22 @@ def generate_monthly():
 
 def main():
     html = fetch_page()
+    
+    # Debugging
+    print(f"HTML length: {len(html)}")
+    print("First 2000 chars:", html[:2000])
+    print("Contains 'self.__next_f.push':", "self.__next_f.push" in html)
+    print("Contains '\"shows\":':", '"shows":' in html)
+    print("Contains '\\\"shows\\\":':", '\\"shows\\":' in html)
+    
+    # Save HTML for manual inspection
+    with open("debug.html", "w", encoding="utf-8") as f:
+        f.write(html)
+    print("Saved full HTML to debug.html")
+
     shows_array = extract_shows_array(html)
     if shows_array is None:
-        print("Could not find shows array. Check HTML structure.")
+        print("Could not find shows array. Check debug.html.")
         return
 
     shows = parse_shows_from_array(shows_array)
