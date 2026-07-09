@@ -1,5 +1,4 @@
 import requests
-import re
 import json
 import os
 from datetime import datetime
@@ -9,7 +8,6 @@ from collections import defaultdict
 URL = "https://www.cinema.com.hk/en/movie/ticketing"
 HEADERS = {"User-Agent": "Mozilla/5.0"}
 
-HK_TZ = ZoneInfo("Asia/Hong_Kong")
 IST_TZ = ZoneInfo("Asia/Kolkata")
 RUN_TIME = datetime.now(IST_TZ).strftime("%Y-%m-%d %I:%M:%S %p IST")
 print("Run Time:", RUN_TIME)
@@ -21,15 +19,48 @@ def fetch_page():
 
 
 def extract_chunks(html):
+    """
+    Extract JSON strings from self.__next_f.push([1, "..."]); calls.
+    """
     chunks = []
-    # Capture the JSON string inside self.__next_f.push([1, "..."]); 
-    pattern = r'self\.__next_f\.push\(\[1,\s*"((?:[^"\\]|\\.)*?)"\)'
-    for match in re.findall(pattern, html, re.S):
+    # Split by the function call
+    parts = html.split("self.__next_f.push(")
+    for part in parts[1:]:  # skip the part before any call
+        # We only care about calls with [1, ...]
+        if not part.lstrip().startswith("[1,"):
+            continue
+
+        # Find the opening double quote after the comma
+        start = part.find('"')
+        if start == -1:
+            continue
+
+        # Find the matching closing quote that is not escaped
+        i = start + 1
+        while i < len(part):
+            if part[i] == '\\':
+                # Skip the escaped character
+                i += 2
+            elif part[i] == '"':
+                # Found the closing quote
+                json_str = part[start + 1:i]
+                break
+            else:
+                i += 1
+        else:
+            # No closing quote found
+            continue
+
+        # The JSON string may end with a trailing ')' before the next call
+        # We already captured the exact JSON string between the quotes.
         try:
-            data = json.loads(match)
+            data = json.loads(json_str)
             chunks.append(data)
-        except json.JSONDecodeError as e:
-            print(f"JSON decode error: {e}")
+        except json.JSONDecodeError:
+            # Sometimes the chunk may be a small string like "1:\"$Sreact.fragment\""
+            # which is not valid JSON on its own; we skip those.
+            pass
+
     return chunks
 
 
@@ -191,7 +222,7 @@ def generate_monthly():
 def main():
     html = fetch_page()
     chunks = extract_chunks(html)
-    print(f"Extracted {len(chunks)} chunks")
+    print(f"Extracted {len(chunks)} JSON chunks")
     shows = parse_shows(chunks)
     print("Shows scraped:", len(shows))
     if shows:
