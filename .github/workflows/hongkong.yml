@@ -1,0 +1,39 @@
+name: Hong Kong Tracker
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "*/30 * * * *"   # every 30 minutes
+
+permissions:
+  contents: write
+
+jobs:
+
+  run:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Dependencies
+        run: pip install requests
+
+      - name: Run Tracker
+        run: python hongkong_tracker.py
+
+      - name: Commit Updates
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "actions@github.com"
+          git add .
+          git commit -m "Hong Kong tracker update" || echo "No changes"
+          git push
