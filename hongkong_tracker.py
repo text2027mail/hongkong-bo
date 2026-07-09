@@ -35,46 +35,43 @@ def fetch_page():
     return r.text
 
 
-def extract_flight_string(html):
+def extract_all_flight_strings(html):
     """
-    Extract the string argument from self.__next_f.push([1, " ... "])
-    Returns the raw string content (including all escapes) or None.
+    Find all self.__next_f.push([1, " ... ") calls and extract the raw string content.
+    Returns a list of decoded strings.
     """
-    patterns = [
-        'self.__next_f.push([1,"',
-        'self.__next_f.push([1, "'
-    ]
-    start = -1
-    for pat in patterns:
-        start = html.find(pat)
-        if start != -1:
+    results = []
+    pattern = 'self.__next_f.push([1,'
+    start_pos = 0
+    while True:
+        start = html.find(pattern, start_pos)
+        if start == -1:
             break
-    if start == -1:
-        print("Could not find self.__next_f.push([1, ...")
-        return None
-
-    start += len(patterns[0]) if patterns[0] == 'self.__next_f.push([1,"' else len(patterns[1])
-
-    i = start
-    while i < len(html):
-        if html[i] == '\\':
-            i += 2
-            continue
-        if html[i] == '"':
-            end = i
+        # Move to the opening quote
+        quote_start = html.find('"', start)
+        if quote_start == -1:
             break
-        i += 1
-    else:
-        print("Could not find closing quote for flight string.")
-        return None
-
-    raw = html[start:end]
-    try:
-        decoded = json.loads('"' + raw + '"')
-        return decoded
-    except json.JSONDecodeError as e:
-        print(f"Failed to decode flight string: {e}")
-        return None
+        # Start scanning after the quote
+        i = quote_start + 1
+        while i < len(html):
+            if html[i] == '\\':
+                i += 2
+                continue
+            if html[i] == '"':
+                end = i
+                break
+            i += 1
+        else:
+            break
+        raw = html[quote_start+1:end]
+        try:
+            decoded = json.loads('"' + raw + '"')
+            results.append(decoded)
+        except json.JSONDecodeError:
+            # If decoding fails, we still store the raw string for inspection
+            results.append(raw)
+        start_pos = end + 1
+    return results
 
 
 def find_shows(data):
@@ -97,36 +94,33 @@ def find_shows(data):
     return None
 
 
-def parse_flight_payload(payload_str):
+def parse_flight_payloads(payload_strings):
     """
-    The payload_str is a concatenation of chunks like "1:...\n2:...\n5:...".
-    Split by newline, parse each chunk, and search for the shows array.
+    Given a list of decoded flight strings, parse each and search for the shows array.
     Returns the shows array if found, else None.
     """
-    lines = payload_str.split('\n')
-    for idx, line in enumerate(lines):
-        line = line.strip()
-        if not line:
-            continue
-        # Find the first colon to separate chunk ID from data.
-        colon_idx = line.find(':')
-        if colon_idx == -1:
-            continue
-        data_str = line[colon_idx+1:]
-        print(f"\n--- Chunk {idx} (first 200 chars): {data_str[:200]}...")
-        # Check if "shows" appears anywhere in the raw data_str
-        if '"shows"' in data_str or 'shows":' in data_str:
-            print("  -> Contains 'shows' key!")
-        try:
-            parsed = json.loads(data_str)
-            print(f"  -> Successfully parsed as JSON ({type(parsed).__name__})")
+    for idx, payload in enumerate(payload_strings):
+        # If it's a string that looks like JSON (starts with '{' or '['), try to parse it
+        # Otherwise, it might be a multi-line chunk? Actually, we already decoded it,
+        # so it should be a proper string that may contain multiple lines.
+        # We'll split by newline and parse each line as before.
+        lines = payload.split('\n')
+        for line in lines:
+            line = line.strip()
+            if not line:
+                continue
+            colon_idx = line.find(':')
+            if colon_idx == -1:
+                continue
+            data_str = line[colon_idx+1:]
+            try:
+                parsed = json.loads(data_str)
+            except json.JSONDecodeError:
+                continue
             shows = find_shows(parsed)
             if shows is not None:
-                print(f"  -> Found 'shows' array with {len(shows)} items!")
+                print(f"Found shows in chunk with ID {line[:colon_idx]}")
                 return shows
-        except json.JSONDecodeError as e:
-            print(f"  -> JSON decode error: {e}")
-            continue
     return None
 
 
@@ -277,22 +271,18 @@ def main():
     print(f"HTML length: {len(html)}")
     print("Contains self.__next_f.push:", "self.__next_f.push" in html)
 
-    flight_str = extract_flight_string(html)
-    if flight_str is None:
-        print("Could not extract flight string.")
-        with open("debug.html", "w", encoding="utf-8") as f:
-            f.write(html)
-        print("Saved debug.html for inspection.")
-        return
-
-    # Save the raw payload for manual inspection
-    with open("payload.txt", "w", encoding="utf-8") as f:
-        f.write(flight_str)
-    print("Saved payload.txt for inspection.")
-
-    shows_array = parse_flight_payload(flight_str)
+    all_strings = extract_all_flight_strings(html)
+    print(f"Found {len(all_strings)} flight strings.")
+    
+    # Optionally, we could filter to the largest one, but we'll just search all.
+    shows_array = parse_flight_payloads(all_strings)
     if shows_array is None:
-        print("Could not find 'shows' array in the flight payload.")
+        print("Could not find 'shows' array in any flight payload.")
+        # Save the first flight string for inspection
+        if all_strings:
+            with open("payload.txt", "w", encoding="utf-8") as f:
+                f.write(all_strings[0])
+            print("Saved first payload to payload.txt for inspection.")
         return
 
     print(f"Found shows array with {len(shows_array)} entries.")
