@@ -1,6 +1,7 @@
 import requests
 import json
 import os
+import re
 from datetime import datetime
 from zoneinfo import ZoneInfo
 from collections import defaultdict
@@ -35,71 +36,96 @@ def fetch_page():
     return r.text
 
 
-def extract_shows_array(html):
-    # Try different patterns to locate the shows array
-    patterns = [
-        '"shows":',
-        '\\"shows\\":',
-        'shows":',
-    ]
-    start = -1
-    for pat in patterns:
-        start = html.find(pat)
-        if start != -1:
-            break
+def extract_flight_string(html):
+    """
+    Extract the string argument from self.__next_f.push([1, " ... "])
+    Returns the raw string content (including all escapes) or None.
+    """
+    # Pattern to match self.__next_f.push([1, " ... "])
+    # The string can contain escaped quotes, so we capture everything between the quotes,
+    # using a non-greedy match that stops at the first unescaped quote.
+    # We'll use a more robust approach: find start, then scan manually to handle escapes.
+    start = html.find('self.__next_f.push([1, "')
     if start == -1:
-        print("Could not find 'shows' key in HTML.")
+        print("Could not find self.__next_f.push([1, ...")
         return None
-
-    # Find the colon after the key
-    colon = html.find(':', start)
-    if colon == -1:
-        return None
-    # Find the first '[' after colon
-    bracket = html.find('[', colon)
-    if bracket == -1:
-        return None
-
-    # Extract array using bracket counting, handling strings and escapes
-    stack = 0
-    i = bracket
-    in_string = False
-    escape = False
+    start += len('self.__next_f.push([1, "')
+    # Now find the closing quote, respecting escapes
+    i = start
     while i < len(html):
-        ch = html[i]
-        if escape:
-            escape = False
-        elif ch == '\\':
-            escape = True
-        elif ch == '"' and not escape:
-            in_string = not in_string
-        elif not in_string:
-            if ch == '[':
-                stack += 1
-            elif ch == ']':
-                stack -= 1
-                if stack == 0:
-                    end = i + 1
-                    break
+        if html[i] == '\\':
+            i += 2  # skip escaped character
+            continue
+        if html[i] == '"':
+            # potential closing quote
+            # check if it's followed by ]) or just ])
+            # Actually the push ends with ]) so we can just take until the quote.
+            # But we need to make sure we don't stop at a quote inside the string.
+            # Since we are inside the string, any quote preceded by backslash is escaped,
+            # and we already skip backslashes. So the first unescaped quote is the closing one.
+            end = i
+            break
         i += 1
     else:
-        print("No matching closing bracket found for shows array.")
+        print("Could not find closing quote for flight string.")
+        return None
+    raw = html[start:end]
+    # The raw string contains escapes like \" and \/ etc.
+    # We need to decode them to actual JSON.
+    # We can use json.loads on a string that wraps it in quotes.
+    # But we must handle the fact that the raw string might contain newlines? It doesn't.
+    # We'll parse it as a JSON string.
+    try:
+        # Unescape the string: treat raw as a JSON string literal.
+        decoded = json.loads('"' + raw + '"')
+        return decoded
+    except json.JSONDecodeError as e:
+        print(f"Failed to decode flight string: {e}")
+        # Fallback: try to manually unescape by replacing known sequences
+        # But we'll rely on json.loads
         return None
 
-    array_str = html[bracket:end]
-    
-    # Fix escaped quotes – the extracted string is a JSON string inside a JS string,
-    # so it contains escaped double quotes like \". We replace them with plain quotes.
-    array_str = array_str.replace('\\"', '"')
-    
-    # Also handle other common escapes if needed (e.g., \/ -> /, \n -> newline)
-    # but the main issue is the quotes.
-    try:
-        return json.loads(array_str)
-    except json.JSONDecodeError as e:
-        print(f"Failed to parse shows array: {e}")
-        print("Array snippet:", array_str[:500])
+
+def parse_flight_payload(payload_str):
+    """
+    The payload_str is a concatenation of chunks like "5:...6:...".
+    We extract the first chunk (or all, but we just need the one containing "shows").
+    Returns the parsed JSON data from the chunk.
+    """
+    # Find the first colon to separate chunk ID from data.
+    colon_idx = payload_str.find(':')
+    if colon_idx == -1:
+        print("No colon found in flight payload")
         return None
+    data_str = payload_str[colon_idx+1:]
+    # The data_str is a JSON value (array or object) with escaped quotes.
+    # json.loads can parse it directly because it contains valid JSON with escaped quotes.
+    try:
+        return json.loads(data_str)
+    except json.JSONDecodeError as e:
+        print(f"Failed to parse flight data: {e}")
+        print("Data snippet:", data_str[:200])
+        return None
+
+
+def find_shows(data):
+    """
+    Recursively search for a key "shows" in the parsed data.
+    Returns the shows array (list) if found, else None.
+    """
+    if isinstance(data, dict):
+        if "shows" in data:
+            return data["shows"]
+        for v in data.values():
+            res = find_shows(v)
+            if res is not None:
+                return res
+    elif isinstance(data, list):
+        for item in data:
+            res = find_shows(item)
+            if res is not None:
+                return res
+    return None
 
 
 def parse_shows_from_array(shows_array):
@@ -246,23 +272,36 @@ def generate_monthly():
 
 def main():
     html = fetch_page()
-    
-    # Debugging (optional)
     print(f"HTML length: {len(html)}")
-    print("Contains 'self.__next_f.push':", "self.__next_f.push" in html)
-    print("Contains '\"shows\":':", '"shows":' in html)
-    print("Contains '\\\"shows\\\":':", '\\"shows\\":' in html)
-    
-    # Uncomment the next line to save a debug HTML file if needed
-    # with open("debug.html", "w", encoding="utf-8") as f:
-    #     f.write(html)
-    # print("Saved full HTML to debug.html")
+    print("Contains self.__next_f.push:", "self.__next_f.push" in html)
 
-    shows_array = extract_shows_array(html)
-    if shows_array is None:
-        print("Could not find shows array. Check debug.html.")
+    # Extract the raw flight string
+    flight_str = extract_flight_string(html)
+    if flight_str is None:
+        print("Could not extract flight string.")
+        # Optionally save debug HTML
+        with open("debug.html", "w", encoding="utf-8") as f:
+            f.write(html)
+        print("Saved debug.html for inspection.")
         return
 
+    # Parse the flight payload
+    parsed_data = parse_flight_payload(flight_str)
+    if parsed_data is None:
+        print("Failed to parse flight data.")
+        return
+
+    # Find the shows array
+    shows_array = find_shows(parsed_data)
+    if shows_array is None:
+        print("Could not find 'shows' key in parsed data.")
+        # If you want to inspect the parsed data, save it
+        with open("parsed_data.json", "w", encoding="utf-8") as f:
+            json.dump(parsed_data, f, indent=2)
+        print("Saved parsed_data.json for inspection.")
+        return
+
+    print(f"Found shows array with {len(shows_array)} entries.")
     shows = parse_shows_from_array(shows_array)
     print("Shows scraped:", len(shows))
 
@@ -271,7 +310,7 @@ def main():
         save_logs(shows)
         generate_monthly()
     else:
-        print("No shows found.")
+        print("No valid shows found.")
 
 
 if __name__ == "__main__":
