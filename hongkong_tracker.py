@@ -1,4 +1,5 @@
 import requests
+import re
 import json
 import os
 from datetime import datetime
@@ -18,108 +19,78 @@ def fetch_page():
     return r.text
 
 
-def extract_shows_array(html):
+def extract_chunks(html):
     """
-    Find the JSON array for 'shows' using bracket counting.
-    This handles escaped characters and nested structures.
+    Extract JSON data from self.__next_f.push([1, "..."]); calls.
+    The string may have a prefix like '0:' before the actual JSON.
     """
-    # Look for the literal \"shows\": which appears in the HTML as escaped JSON
-    # In the raw HTML, it's "shows": (with quotes), but because it's inside a string,
-    # it's actually backslash+quote. We search for the raw sequence: "\"shows\":"
-    # However, in the HTML text, the backslash is present, so we search for a backslash and quote.
-    # The HTML contains a string like: \"shows\":[{\"id\"...
-    # So we search for the literal substring: "shows": (without escaping) because
-    # when Python reads the HTML, the backslashes are actual characters.
-    # The substring we want is: "shows": (double quote, shows, double quote, colon)
-    # Actually, in the HTML, it's \"shows\": which is backslash, double quote, shows, double quote, colon.
-    # So we search for b'"shows":'? No, the sequence is backslash, double quote, shows, double quote, colon.
-    # In Python, that is '\\"shows\\":'.
-    # Let's search for 'shows":' to be safe, but need to ensure we get the correct array.
-    start = html.find('"shows":')
-    if start == -1:
-        # Try alternative: "shows" without the leading backslash? Actually the HTML has backslash.
-        # Try with backslash: 
-        start = html.find('\\"shows\\":')
-        if start == -1:
-            return None
-        # Move to the colon position, we need to find the '[' after the colon.
-        # We'll find the first '[' after the colon.
-        colon = html.find(':', start)
-        if colon == -1:
-            return None
-        # Find the '[' after colon
-        start_bracket = html.find('[', colon)
-        if start_bracket == -1:
-            return None
-    else:
-        # We have the literal "shows": (without backslash) – might be inside a string but okay.
-        colon = html.find(':', start)
-        if colon == -1:
-            return None
-        start_bracket = html.find('[', colon)
-        if start_bracket == -1:
-            return None
-
-    # Now extract the array using bracket counting
-    stack = 0
-    i = start_bracket
-    in_string = False
-    escape = False
-    while i < len(html):
-        ch = html[i]
-        if escape:
-            escape = False
-        elif ch == '\\':
-            escape = True
-        elif ch == '"' and not escape:
-            in_string = not in_string
-        elif not in_string:
-            if ch == '[':
-                stack += 1
-            elif ch == ']':
-                stack -= 1
-                if stack == 0:
-                    end = i + 1
-                    break
-        i += 1
-    else:
-        return None  # No matching bracket found
-
-    array_str = html[start_bracket:end]
-    try:
-        return json.loads(array_str)
-    except json.JSONDecodeError:
-        return None
-
-
-def parse_shows_from_array(shows_array):
-    shows = []
-    for show in shows_array:
+    chunks = []
+    # Pattern to capture the string between the quotes
+    pattern = r'self\.__next_f\.push\(\s*\[\s*1\s*,\s*"((?:[^"\\]|\\.)*?)"\s*\)'
+    for match in re.findall(pattern, html, re.S):
+        # Try to parse the raw string directly
         try:
-            show_id = show["id"]
-            date = show["date"][:10]
-            time = show["time"][11:16] if len(show["time"]) >= 16 else show["time"]
-            price = show["price"]
-            seats = show["seats"]
-            sold = show["sold"]
-            movie = show["movie"]["name"]
-            venue = show.get("site", {}).get("name", "Cinema.com.hk")
-            shows.append({
-                "perfIx": show_id,
-                "movie": movie,
-                "venue": venue,
-                "date": date,
-                "time": time,
-                "total": seats,
-                "available": seats - sold,
-                "blocked": 0,
-                "sold": sold,
-                "gross": sold * price,
-                "price": price,
-                "last_updated": RUN_TIME
-            })
-        except KeyError:
+            data = json.loads(match)
+            chunks.append(data)
             continue
+        except json.JSONDecodeError:
+            pass
+
+        # If it fails, strip any prefix before the first '{'
+        brace_start = match.find('{')
+        if brace_start != -1:
+            clean = match[brace_start:]
+            try:
+                data = json.loads(clean)
+                chunks.append(data)
+            except json.JSONDecodeError:
+                # Still invalid, skip
+                pass
+    return chunks
+
+
+def parse_shows(chunks):
+    shows = []
+
+    def search_shows(obj):
+        if isinstance(obj, dict):
+            for key, value in obj.items():
+                if key == "shows" and isinstance(value, list):
+                    for show in value:
+                        try:
+                            show_id = show["id"]
+                            date = show["date"][:10]
+                            time = show["time"][11:16] if len(show["time"]) >= 16 else show["time"]
+                            price = show["price"]
+                            seats = show["seats"]
+                            sold = show["sold"]
+                            movie = show["movie"]["name"]
+                            venue = show.get("site", {}).get("name", "Cinema.com.hk")
+                            shows.append({
+                                "perfIx": show_id,
+                                "movie": movie,
+                                "venue": venue,
+                                "date": date,
+                                "time": time,
+                                "total": seats,
+                                "available": seats - sold,
+                                "blocked": 0,
+                                "sold": sold,
+                                "gross": sold * price,
+                                "price": price,
+                                "last_updated": RUN_TIME
+                            })
+                        except KeyError:
+                            continue
+                else:
+                    search_shows(value)
+        elif isinstance(obj, list):
+            for item in obj:
+                search_shows(item)
+
+    for chunk in chunks:
+        search_shows(chunk)
+
     return shows
 
 
@@ -235,14 +206,10 @@ def generate_monthly():
 
 def main():
     html = fetch_page()
-    shows_array = extract_shows_array(html)
-    if shows_array is None:
-        print("Could not find shows array. Check HTML structure.")
-        return
-
-    shows = parse_shows_from_array(shows_array)
+    chunks = extract_chunks(html)
+    print(f"Extracted {len(chunks)} JSON chunks")
+    shows = parse_shows(chunks)
     print("Shows scraped:", len(shows))
-
     if shows:
         save_daily(shows)
         save_logs(shows)
