@@ -20,69 +20,66 @@ def fetch_page():
     return r.text
 
 
-def extract_chunks(html):
-    """
-    Extract JSON strings from self.__next_f.push([1, "..."]).
-    Returns a list of parsed Python objects (dict/list).
-    """
-    chunks = []
-    # regex to capture the double-quoted JSON string (handles escaped quotes)
-    pattern = r'self\.__next_f\.push\(\[1,\s*"((?:[^"\\]|\\.)*)"\)'
-    for match in re.findall(pattern, html, re.S):
-        try:
-            data = json.loads(match)
-            chunks.append(data)
-        except json.JSONDecodeError:
-            pass
-    return chunks
+def extract_shows_array(html):
+    """Find the JSON array for 'shows' using bracket counting."""
+    start = html.find('"shows":[')
+    if start == -1:
+        return None
+    start = html.find('[', start)
+    if start == -1:
+        return None
+
+    stack = 0
+    i = start
+    while i < len(html):
+        ch = html[i]
+        if ch == '[':
+            stack += 1
+        elif ch == ']':
+            stack -= 1
+            if stack == 0:
+                end = i + 1
+                break
+        i += 1
+
+    if stack != 0:
+        return None
+
+    array_str = html[start:end]
+    try:
+        return json.loads(array_str)
+    except json.JSONDecodeError:
+        return None
 
 
-def parse_shows(chunks):
+def parse_shows_from_array(shows_array):
     shows = []
-
-    def search_shows(obj):
-        """Recursively find all 'shows' lists inside obj."""
-        if isinstance(obj, dict):
-            for key, value in obj.items():
-                if key == "shows" and isinstance(value, list):
-                    for show in value:
-                        try:
-                            # Extract required fields
-                            show_id = show["id"]
-                            date = show["date"][:10]  # YYYY-MM-DD
-                            time = show["time"][11:16] if len(show["time"]) >= 16 else show["time"]
-                            price = show["price"]
-                            seats = show["seats"]
-                            sold = show["sold"]
-                            movie = show["movie"]["name"]
-                            # venue: use site.name if present, otherwise fallback
-                            venue = show.get("site", {}).get("name", "Cinema.com.hk")
-                            shows.append({
-                                "perfIx": show_id,
-                                "movie": movie,
-                                "venue": venue,
-                                "date": date,
-                                "time": time,
-                                "total": seats,
-                                "available": seats - sold,
-                                "blocked": 0,
-                                "sold": sold,
-                                "gross": sold * price,
-                                "price": price,
-                                "last_updated": RUN_TIME
-                            })
-                        except KeyError:
-                            # Skip if any required field is missing
-                            pass
-                else:
-                    search_shows(value)
-        elif isinstance(obj, list):
-            for item in obj:
-                search_shows(item)
-
-    for chunk in chunks:
-        search_shows(chunk)
-
+    for show in shows_array:
+        try:
+            show_id = show["id"]
+            date = show["date"][:10]
+            time = show["time"][11:16] if len(show["time"]) >= 16 else show["time"]
+            price = show["price"]
+            seats = show["seats"]
+            sold = show["sold"]
+            movie = show["movie"]["name"]
+            venue = show.get("site", {}).get("name", "Cinema.com.hk")
+            shows.append({
+                "perfIx": show_id,
+                "movie": movie,
+                "venue": venue,
+                "date": date,
+                "time": time,
+                "total": seats,
+                "available": seats - sold,
+                "blocked": 0,
+                "sold": sold,
+                "gross": sold * price,
+                "price": price,
+                "last_updated": RUN_TIME
+            })
+        except KeyError:
+            continue
     return shows
 
 
@@ -104,7 +101,6 @@ def save_daily(shows):
         else:
             old = []
 
-        # Merge by perfIx (preserve latest data)
         index = {d["perfIx"]: d for d in old}
         for s in data:
             index[s["perfIx"]] = s
@@ -199,15 +195,20 @@ def generate_monthly():
 
 def main():
     html = fetch_page()
-    chunks = extract_chunks(html)
-    shows = parse_shows(chunks)
+    shows_array = extract_shows_array(html)
+    if shows_array is None:
+        print("Could not find shows array. Check HTML structure.")
+        return
+
+    shows = parse_shows_from_array(shows_array)
     print("Shows scraped:", len(shows))
+
     if shows:
         save_daily(shows)
         save_logs(shows)
         generate_monthly()
     else:
-        print("No shows found. Check extraction.")
+        print("No shows found.")
 
 
 if __name__ == "__main__":
