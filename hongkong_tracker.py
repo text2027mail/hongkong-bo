@@ -1,4 +1,5 @@
 import requests
+import re
 import json
 import os
 from datetime import datetime
@@ -20,47 +21,31 @@ def fetch_page():
 
 def extract_chunks(html):
     """
-    Extract JSON strings from self.__next_f.push([1, "..."]); calls.
+    Extract JSON data from self.__next_f.push([1, "..."]); calls.
+    The string may have a prefix like '0:' before the actual JSON.
     """
     chunks = []
-    # Split by the function call
-    parts = html.split("self.__next_f.push(")
-    for part in parts[1:]:  # skip the part before any call
-        # We only care about calls with [1, ...]
-        if not part.lstrip().startswith("[1,"):
-            continue
-
-        # Find the opening double quote after the comma
-        start = part.find('"')
-        if start == -1:
-            continue
-
-        # Find the matching closing quote that is not escaped
-        i = start + 1
-        while i < len(part):
-            if part[i] == '\\':
-                # Skip the escaped character
-                i += 2
-            elif part[i] == '"':
-                # Found the closing quote
-                json_str = part[start + 1:i]
-                break
-            else:
-                i += 1
-        else:
-            # No closing quote found
-            continue
-
-        # The JSON string may end with a trailing ')' before the next call
-        # We already captured the exact JSON string between the quotes.
+    # Pattern to capture the string between the quotes
+    pattern = r'self\.__next_f\.push\(\s*\[\s*1\s*,\s*"((?:[^"\\]|\\.)*?)"\s*\)'
+    for match in re.findall(pattern, html, re.S):
+        # Try to parse the raw string directly
         try:
-            data = json.loads(json_str)
+            data = json.loads(match)
             chunks.append(data)
+            continue
         except json.JSONDecodeError:
-            # Sometimes the chunk may be a small string like "1:\"$Sreact.fragment\""
-            # which is not valid JSON on its own; we skip those.
             pass
 
+        # If it fails, strip any prefix before the first '{'
+        brace_start = match.find('{')
+        if brace_start != -1:
+            clean = match[brace_start:]
+            try:
+                data = json.loads(clean)
+                chunks.append(data)
+            except json.JSONDecodeError:
+                # Still invalid, skip
+                pass
     return chunks
 
 
