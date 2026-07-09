@@ -1,7 +1,6 @@
 import requests
 import json
 import os
-import re
 from datetime import datetime
 from zoneinfo import ZoneInfo
 from collections import defaultdict
@@ -41,7 +40,6 @@ def extract_flight_string(html):
     Extract the string argument from self.__next_f.push([1, " ... "])
     Returns the raw string content (including all escapes) or None.
     """
-    # Try both patterns: with and without space after comma
     patterns = [
         'self.__next_f.push([1,"',
         'self.__next_f.push([1, "'
@@ -55,20 +53,14 @@ def extract_flight_string(html):
         print("Could not find self.__next_f.push([1, ...")
         return None
 
-    # Move to the beginning of the actual string (after the opening quote)
     start += len(patterns[0]) if patterns[0] == 'self.__next_f.push([1,"' else len(patterns[1])
-    # Now start is at the first character of the string
 
-    # Scan for the closing quote, respecting escapes
     i = start
     while i < len(html):
         if html[i] == '\\':
-            # skip escaped character
             i += 2
             continue
         if html[i] == '"':
-            # potential closing quote; check that it's not inside a JSON string
-            # since we are inside the raw string, the closing quote is the first unescaped quote
             end = i
             break
         i += 1
@@ -77,35 +69,11 @@ def extract_flight_string(html):
         return None
 
     raw = html[start:end]
-    # Now decode the raw string using json.loads to unescape
     try:
         decoded = json.loads('"' + raw + '"')
         return decoded
     except json.JSONDecodeError as e:
         print(f"Failed to decode flight string: {e}")
-        # If json.loads fails, we can try to manually replace known escapes
-        # but it's better to debug why it fails.
-        return None
-
-
-def parse_flight_payload(payload_str):
-    """
-    The payload_str is a concatenation of chunks like "5:...".
-    Extract the first chunk (or all, but we just need the one containing "shows").
-    Returns the parsed JSON data from the chunk.
-    """
-    # Find the first colon to separate chunk ID from data.
-    colon_idx = payload_str.find(':')
-    if colon_idx == -1:
-        print("No colon found in flight payload")
-        return None
-    data_str = payload_str[colon_idx+1:]
-    # The data_str is a JSON value (array or object) with escaped quotes.
-    try:
-        return json.loads(data_str)
-    except json.JSONDecodeError as e:
-        print(f"Failed to parse flight data: {e}")
-        print("Data snippet:", data_str[:200])
         return None
 
 
@@ -126,6 +94,33 @@ def find_shows(data):
             res = find_shows(item)
             if res is not None:
                 return res
+    return None
+
+
+def parse_flight_payload(payload_str):
+    """
+    The payload_str is a concatenation of chunks like "1:...\n2:...\n5:...".
+    Split by newline, parse each chunk, and search for the shows array.
+    Returns the shows array if found, else None.
+    """
+    lines = payload_str.split('\n')
+    for line in lines:
+        line = line.strip()
+        if not line:
+            continue
+        # Find the first colon to separate chunk ID from data.
+        colon_idx = line.find(':')
+        if colon_idx == -1:
+            continue
+        data_str = line[colon_idx+1:]
+        try:
+            parsed = json.loads(data_str)
+        except json.JSONDecodeError:
+            # Some chunks are not JSON (e.g., "I[...]") – skip them.
+            continue
+        shows = find_shows(parsed)
+        if shows is not None:
+            return shows
     return None
 
 
@@ -276,30 +271,21 @@ def main():
     print(f"HTML length: {len(html)}")
     print("Contains self.__next_f.push:", "self.__next_f.push" in html)
 
-    # Extract the raw flight string
     flight_str = extract_flight_string(html)
     if flight_str is None:
         print("Could not extract flight string.")
-        # Optionally save debug HTML
         with open("debug.html", "w", encoding="utf-8") as f:
             f.write(html)
         print("Saved debug.html for inspection.")
         return
 
-    # Parse the flight payload
-    parsed_data = parse_flight_payload(flight_str)
-    if parsed_data is None:
-        print("Failed to parse flight data.")
-        return
-
-    # Find the shows array
-    shows_array = find_shows(parsed_data)
+    shows_array = parse_flight_payload(flight_str)
     if shows_array is None:
-        print("Could not find 'shows' key in parsed data.")
-        # If you want to inspect the parsed data, save it
-        with open("parsed_data.json", "w", encoding="utf-8") as f:
-            json.dump(parsed_data, f, indent=2)
-        print("Saved parsed_data.json for inspection.")
+        print("Could not find 'shows' array in the flight payload.")
+        # Save the extracted payload for inspection
+        with open("payload.txt", "w", encoding="utf-8") as f:
+            f.write(flight_str)
+        print("Saved payload.txt for inspection.")
         return
 
     print(f"Found shows array with {len(shows_array)} entries.")
