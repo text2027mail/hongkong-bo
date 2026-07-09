@@ -41,55 +41,57 @@ def extract_flight_string(html):
     Extract the string argument from self.__next_f.push([1, " ... "])
     Returns the raw string content (including all escapes) or None.
     """
-    # Pattern to match self.__next_f.push([1, " ... "])
-    # The string can contain escaped quotes, so we capture everything between the quotes,
-    # using a non-greedy match that stops at the first unescaped quote.
-    # We'll use a more robust approach: find start, then scan manually to handle escapes.
-    start = html.find('self.__next_f.push([1, "')
+    # Try both patterns: with and without space after comma
+    patterns = [
+        'self.__next_f.push([1,"',
+        'self.__next_f.push([1, "'
+    ]
+    start = -1
+    for pat in patterns:
+        start = html.find(pat)
+        if start != -1:
+            break
     if start == -1:
         print("Could not find self.__next_f.push([1, ...")
         return None
-    start += len('self.__next_f.push([1, "')
-    # Now find the closing quote, respecting escapes
+
+    # Move to the beginning of the actual string (after the opening quote)
+    start += len(patterns[0]) if patterns[0] == 'self.__next_f.push([1,"' else len(patterns[1])
+    # Now start is at the first character of the string
+
+    # Scan for the closing quote, respecting escapes
     i = start
     while i < len(html):
         if html[i] == '\\':
-            i += 2  # skip escaped character
+            # skip escaped character
+            i += 2
             continue
         if html[i] == '"':
-            # potential closing quote
-            # check if it's followed by ]) or just ])
-            # Actually the push ends with ]) so we can just take until the quote.
-            # But we need to make sure we don't stop at a quote inside the string.
-            # Since we are inside the string, any quote preceded by backslash is escaped,
-            # and we already skip backslashes. So the first unescaped quote is the closing one.
+            # potential closing quote; check that it's not inside a JSON string
+            # since we are inside the raw string, the closing quote is the first unescaped quote
             end = i
             break
         i += 1
     else:
         print("Could not find closing quote for flight string.")
         return None
+
     raw = html[start:end]
-    # The raw string contains escapes like \" and \/ etc.
-    # We need to decode them to actual JSON.
-    # We can use json.loads on a string that wraps it in quotes.
-    # But we must handle the fact that the raw string might contain newlines? It doesn't.
-    # We'll parse it as a JSON string.
+    # Now decode the raw string using json.loads to unescape
     try:
-        # Unescape the string: treat raw as a JSON string literal.
         decoded = json.loads('"' + raw + '"')
         return decoded
     except json.JSONDecodeError as e:
         print(f"Failed to decode flight string: {e}")
-        # Fallback: try to manually unescape by replacing known sequences
-        # But we'll rely on json.loads
+        # If json.loads fails, we can try to manually replace known escapes
+        # but it's better to debug why it fails.
         return None
 
 
 def parse_flight_payload(payload_str):
     """
-    The payload_str is a concatenation of chunks like "5:...6:...".
-    We extract the first chunk (or all, but we just need the one containing "shows").
+    The payload_str is a concatenation of chunks like "5:...".
+    Extract the first chunk (or all, but we just need the one containing "shows").
     Returns the parsed JSON data from the chunk.
     """
     # Find the first colon to separate chunk ID from data.
@@ -99,7 +101,6 @@ def parse_flight_payload(payload_str):
         return None
     data_str = payload_str[colon_idx+1:]
     # The data_str is a JSON value (array or object) with escaped quotes.
-    # json.loads can parse it directly because it contains valid JSON with escaped quotes.
     try:
         return json.loads(data_str)
     except json.JSONDecodeError as e:
