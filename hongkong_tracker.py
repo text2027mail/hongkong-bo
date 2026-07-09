@@ -104,7 +104,7 @@ def parse_flight_payload(payload_str):
     Returns the shows array if found, else None.
     """
     lines = payload_str.split('\n')
-    for line in lines:
+    for idx, line in enumerate(lines):
         line = line.strip()
         if not line:
             continue
@@ -113,14 +113,20 @@ def parse_flight_payload(payload_str):
         if colon_idx == -1:
             continue
         data_str = line[colon_idx+1:]
+        print(f"\n--- Chunk {idx} (first 200 chars): {data_str[:200]}...")
+        # Check if "shows" appears anywhere in the raw data_str
+        if '"shows"' in data_str or 'shows":' in data_str:
+            print("  -> Contains 'shows' key!")
         try:
             parsed = json.loads(data_str)
-        except json.JSONDecodeError:
-            # Some chunks are not JSON (e.g., "I[...]") – skip them.
+            print(f"  -> Successfully parsed as JSON ({type(parsed).__name__})")
+            shows = find_shows(parsed)
+            if shows is not None:
+                print(f"  -> Found 'shows' array with {len(shows)} items!")
+                return shows
+        except json.JSONDecodeError as e:
+            print(f"  -> JSON decode error: {e}")
             continue
-        shows = find_shows(parsed)
-        if shows is not None:
-            return shows
     return None
 
 
@@ -279,13 +285,14 @@ def main():
         print("Saved debug.html for inspection.")
         return
 
+    # Save the raw payload for manual inspection
+    with open("payload.txt", "w", encoding="utf-8") as f:
+        f.write(flight_str)
+    print("Saved payload.txt for inspection.")
+
     shows_array = parse_flight_payload(flight_str)
     if shows_array is None:
         print("Could not find 'shows' array in the flight payload.")
-        # Save the extracted payload for inspection
-        with open("payload.txt", "w", encoding="utf-8") as f:
-            f.write(flight_str)
-        print("Saved payload.txt for inspection.")
         return
 
     print(f"Found shows array with {len(shows_array)} entries.")
