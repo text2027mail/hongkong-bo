@@ -1,0 +1,58 @@
+[
+  {
+    "perfIx": 126225,
+    "movie": "The Grand Budapest Hotel",
+    "venue": "PREMIERE ELEMENTS",
+    "date": "2026-08-22",
+    "time": "13:00",
+    "total": 74,
+    "available": 74,
+    "blocked": 0,
+    "sold": 0,
+    "gross": 0,
+    "price": 110,
+    "last_updated": "2026-07-10 12:04:08 PM IST"
+  },
+  {
+    "perfIx": 98157,
+    "movie": "The Audience (NT Live 2026-27)",
+    "venue": "MOViE MOViE Pacific Place (Admiralty)",
+    "date": "2026-08-22",
+    "time": "16:00",
+    "total": 113,
+    "available": 81,
+    "blocked": 0,
+    "sold": 32,
+    "gross": 8000,
+    "price": 250,
+    "last_updated": "2026-07-10 12:04:08 PM IST"
+  },
+  {
+    "perfIx": 98608,
+    "movie": "Hamlet (NT Live 2026-27)",
+    "venue": "PALACE ifc",
+    "date": "2026-08-22",
+    "time": "16:00",
+    "total": 88,
+    "available": 80,
+    "blocked": 0,
+    "sold": 8,
+    "gross": 2000,
+    "price": 250,
+    "last_updated": "2026-07-10 12:04:08 PM IST"
+  },
+  {
+    "perfIx": 124762,
+    "movie": "Let's have a cup of doodh patti chai",
+    "venue": "CINEMATHEQUE",
+    "date": "2026-08-22",
+    "time": "17:00",
+    "total": 119,
+    "available": 110,
+    "blocked": 0,
+    "sold": 9,
+    "gross": 855,
+    "price": 95,
+    "last_updated": "2026-07-10 12:04:08 PM IST"
+  }
+]

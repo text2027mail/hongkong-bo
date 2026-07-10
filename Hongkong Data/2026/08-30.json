@@ -1,0 +1,58 @@
+[
+  {
+    "perfIx": 124764,
+    "movie": "Let's have a cup of doodh patti chai",
+    "venue": "CINEMATHEQUE",
+    "date": "2026-08-30",
+    "time": "13:30",
+    "total": 119,
+    "available": 111,
+    "blocked": 0,
+    "sold": 8,
+    "gross": 760,
+    "price": 95,
+    "last_updated": "2026-07-10 12:04:08 PM IST"
+  },
+  {
+    "perfIx": 98169,
+    "movie": "The Fifth Step (NT Live 2026-27) ",
+    "venue": "PREMIERE ELEMENTS",
+    "date": "2026-08-30",
+    "time": "14:00",
+    "total": 127,
+    "available": 106,
+    "blocked": 0,
+    "sold": 21,
+    "gross": 4830,
+    "price": 230,
+    "last_updated": "2026-07-10 12:04:08 PM IST"
+  },
+  {
+    "perfIx": 124773,
+    "movie": "Farewell to my Concubine (4K Restored Version)",
+    "venue": "PREMIERE ELEMENTS",
+    "date": "2026-08-30",
+    "time": "15:50",
+    "total": 127,
+    "available": 125,
+    "blocked": 0,
+    "sold": 2,
+    "gross": 320,
+    "price": 160,
+    "last_updated": "2026-07-10 12:04:08 PM IST"
+  },
+  {
+    "perfIx": 100660,
+    "movie": "Merrily We Roll Along (2026)",
+    "venue": "MOViE MOViE Pacific Place (Admiralty)",
+    "date": "2026-08-30",
+    "time": "16:30",
+    "total": 81,
+    "available": 76,
+    "blocked": 0,
+    "sold": 5,
+    "gross": 1100,
+    "price": 220,
+    "last_updated": "2026-07-10 12:04:08 PM IST"
+  }
+]

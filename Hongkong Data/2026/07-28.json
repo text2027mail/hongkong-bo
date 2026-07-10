@@ -1,0 +1,30 @@
+[
+  {
+    "perfIx": 121016,
+    "movie": "The Dialogue Police (EADF2026) ",
+    "venue": "PALACE ifc",
+    "date": "2026-07-28",
+    "time": "19:05",
+    "total": 99,
+    "available": 74,
+    "blocked": 0,
+    "sold": 25,
+    "gross": 2375,
+    "price": 95,
+    "last_updated": "2026-07-10 12:04:08 PM IST"
+  },
+  {
+    "perfIx": 120995,
+    "movie": "We Live Here (EADF2026) ",
+    "venue": "CINEMATHEQUE",
+    "date": "2026-07-28",
+    "time": "19:50",
+    "total": 119,
+    "available": 94,
+    "blocked": 0,
+    "sold": 25,
+    "gross": 2375,
+    "price": 95,
+    "last_updated": "2026-07-10 12:04:08 PM IST"
+  }
+]
