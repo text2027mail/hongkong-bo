@@ -1,0 +1,53 @@
+{
+  "id": 1022,
+  "movieId": "",
+  "masterId": "",
+  "extId": "",
+  "slug": "ponsonbyland-eadf2026",
+  "title": "Ponsonbyland (EADF2026) ",
+  "title_lang": {
+    "en": "Ponsonbyland (EADF2026) ",
+    "zh_hk": "比利是拉圭？(EADF2026) "
+  },
+  "synopsis": "<p>Eva, a podcaster from Ghent, Belgium, receives surprising information that prompts her to investigate beyond borders and the role of one man in History. Are Uruguay and Belgium two sibling countries, children of the same unrecognized father? What was the role of Irish diplomat Lord John Ponsonby in the founding of two nation-states that seemingly have nothing in common? Welcome to Ponsonbyland: an invitation to reflect on nationality and identities from a different perspective.</p>",
+  "synopsis_lang": {
+    "en": "<p>Eva, a podcaster from Ghent, Belgium, receives surprising information that prompts her to investigate beyond borders and the role of one man in History. Are Uruguay and Belgium two sibling countries, children of the same unrecognized father? What was the role of Irish diplomat Lord John Ponsonby in the founding of two nation-states that seemingly have nothing in common? Welcome to Ponsonbyland: an invitation to reflect on nationality and identities from a different perspective.</p>",
+    "zh_hk": "<p>比利時 Podcast 主持人收到一條神秘線索，驅使她跨國追查一個被歷史遺忘的異國外交官。烏拉圭與比利時這兩個相隔萬里、看似風馬牛不相及的國家，背後竟由同一個「生父」一手催生？愛爾蘭外交官約翰龐森比勳爵，究竟如何巧妙地在兩國的建國過程中伸出無形之手？這裏沒有神話，只有以不同角度，探討地圖線條背後，關於國族與身份的歷史謎題。一個國家如何建構出來？在國族的集體記憶中，又有多少真相被刻意掩蓋？</p>"
+  },
+  "category": null,
+  "duration": 83,
+  "releaseDate": "2026-07-31T00:00:00.000Z",
+  "genres": [],
+  "director": "Ramiro Cabrera",
+  "director_lang": {
+    "en": "Ramiro Cabrera",
+    "zh_hk": "Ramiro Cabrera"
+  },
+  "cast": "",
+  "cast_lang": {
+    "en": "",
+    "zh_hk": ""
+  },
+  "dialect": "Spanish,French,Dutch,English",
+  "dialect_lang": {
+    "en": "Spanish,French,Dutch,English",
+    "zh_hk": "西班牙語,法語,荷蘭語,英文"
+  },
+  "subtitle": "English",
+  "subtitle_lang": {
+    "en": "English",
+    "zh_hk": "英文"
+  },
+  "poster": "programIt_c86b3eb5-c719-457c-8544-9bc7536d086f.jpg",
+  "landscapeImages": [],
+  "trailer": "",
+  "website": "",
+  "featured": false,
+  "active": true,
+  "numSchedules": 0,
+  "maxTime": "2026-08-08T07:25:00.000Z",
+  "tags": [],
+  "hkta": true,
+  "createdAt": "2026-07-01T03:22:08.352Z",
+  "updatedAt": "2026-07-07T05:47:23.316Z"
+}

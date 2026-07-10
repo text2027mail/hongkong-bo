@@ -1,0 +1,53 @@
+{
+  "id": 928,
+  "movieId": "",
+  "masterId": "",
+  "extId": "",
+  "slug": "stranger-than-paradise",
+  "title": "Stranger than Paradise",
+  "title_lang": {
+    "en": "Stranger than Paradise",
+    "zh_hk": "天堂異客"
+  },
+  "synopsis": "<p>\"You come to someplace new, and everything looks just the same.\"<br>Expanding on<i> Permanent Vacation</i>'s themes of rootless drifting, the routine of New York-based Willie is disrupted by his Hungarian cousin Eva. A year later, Willie and his friend Eddie travel to Cleveland to visit her, leading to a spontaneous road trip to Florida. Jarmusch shot the first act using leftover film stock from Wim Wenders. By piecing together mundane details to build the story, he cemented his signature minimalist aesthetic.<br><br>&nbsp;</p>",
+  "synopsis_lang": {
+    "en": "<p>\"You come to someplace new, and everything looks just the same.\"<br>Expanding on<i> Permanent Vacation</i>'s themes of rootless drifting, the routine of New York-based Willie is disrupted by his Hungarian cousin Eva. A year later, Willie and his friend Eddie travel to Cleveland to visit her, leading to a spontaneous road trip to Florida. Jarmusch shot the first act using leftover film stock from Wim Wenders. By piecing together mundane details to build the story, he cemented his signature minimalist aesthetic.<br><br>&nbsp;</p>",
+    "zh_hk": "<p>「去到一個新地方，結果看起來還是一模一樣。」<br>獨居紐約的威利，因匈牙利表妹伊娃突然造訪而打破了原本平淡的生活 。一年後，威利與好友艾迪到冰天雪地的克里夫蘭探望她，三人展開了前往佛羅里達州的即興公路之旅。電影第一章是借用雲溫達斯拍戲剩餘的菲林拍成。延續前作對無根與異鄉人的探討，占渣木殊將平凡的生活細節拼湊成篇，奠定了招牌的極簡敘事與冷面幽默風格。<br>&nbsp;</p>"
+  },
+  "category": "IIB",
+  "duration": 90,
+  "releaseDate": "2026-06-19T00:00:00.000Z",
+  "genres": [],
+  "director": "Jim Jarmusch",
+  "director_lang": {
+    "en": "Jim Jarmusch",
+    "zh_hk": "占渣木殊"
+  },
+  "cast": "John Lurie, Eszter Balint, Richard Edson",
+  "cast_lang": {
+    "en": "John Lurie, Eszter Balint, Richard Edson",
+    "zh_hk": "John Lurie, Eszter Balint, Richard Edson"
+  },
+  "dialect": "English,Hungarian",
+  "dialect_lang": {
+    "en": "English,Hungarian",
+    "zh_hk": "英文,匈牙利語"
+  },
+  "subtitle": "Chinese",
+  "subtitle_lang": {
+    "en": "Chinese",
+    "zh_hk": "中文"
+  },
+  "poster": "programSr_2d6e4ffc-c34e-4349-8049-af220652c024.jpg",
+  "landscapeImages": [],
+  "trailer": "https://trailer.cinema.com.hk/trailer/2026-JimJarmuschRetro_Trailer.mp4",
+  "website": "",
+  "featured": false,
+  "active": true,
+  "numSchedules": 0,
+  "maxTime": "2026-07-26T05:30:00.000Z",
+  "tags": [],
+  "hkta": true,
+  "createdAt": "2026-06-07T10:16:30.546Z",
+  "updatedAt": "2026-06-24T11:10:40.112Z"
+}

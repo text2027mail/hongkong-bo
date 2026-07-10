@@ -1,0 +1,50 @@
+{
+  "id": 1042,
+  "movieId": "F-4945",
+  "masterId": "3812",
+  "extId": "",
+  "slug": "i-want-to-be-a-plastic-chair-1000day-anniversary-special-screening",
+  "title": "I Want To Be A Plastic Chair (1000-Day Anniversary Special Screening) ",
+  "title_lang": {
+    "en": "I Want To Be A Plastic Chair (1000-Day Anniversary Special Screening) ",
+    "zh_hk": "來世還作人 (1000日紀念特典場)"
+  },
+  "synopsis": "$2f",
+  "synopsis_lang": {},
+  "category": "III",
+  "duration": 106,
+  "releaseDate": "2026-08-09T00:00:00.000Z",
+  "genres": [],
+  "director": "Ao Ieong Weng-Fong, Anna Ieong",
+  "director_lang": {
+    "en": "Ao Ieong Weng-Fong, Anna Ieong",
+    "zh_hk": "歐陽永鋒、楊螢映"
+  },
+  "cast": "Wong Hin Yan, Anna Ieong, Mok Ka Hou",
+  "cast_lang": {
+    "en": "Wong Hin Yan, Anna Ieong, Mok Ka Hou",
+    "zh_hk": "黃衍仁、楊螢映、莫家豪"
+  },
+  "dialect": "Cantonese",
+  "dialect_lang": {
+    "en": "Cantonese",
+    "zh_hk": "粵語"
+  },
+  "subtitle": "Chinese,English",
+  "subtitle_lang": {
+    "en": "Chinese,English",
+    "zh_hk": "中文,英文"
+  },
+  "poster": "programcu_24454622-147f-40ab-b6d5-9ed35e36490f.jpg",
+  "landscapeImages": [],
+  "trailer": "",
+  "website": "",
+  "featured": false,
+  "active": true,
+  "numSchedules": 0,
+  "maxTime": "2026-09-05T07:20:00.000Z",
+  "tags": [],
+  "hkta": true,
+  "createdAt": "2026-07-07T03:09:41.931Z",
+  "updatedAt": "2026-07-07T03:25:05.802Z"
+}

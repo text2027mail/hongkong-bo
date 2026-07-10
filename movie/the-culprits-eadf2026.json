@@ -1,0 +1,55 @@
+{
+  "id": 1024,
+  "movieId": "",
+  "masterId": "",
+  "extId": "",
+  "slug": "the-culprits-eadf2026",
+  "title": "The Culprits (EADF2026) ",
+  "title_lang": {
+    "en": "The Culprits (EADF2026) ",
+    "zh_hk": "墮落之聲 (EADF2026) "
+  },
+  "synopsis": "<p>After years of silence about the abortion she experienced as a teenager, Marta receives a hundred anonymous testimonies from women who have gone through the same experience. Bringing these stories to the screen, along with six girls who give a voice and a face to these silenced accounts, she creates a shared space where what was once silenced becomes collective. Acting as a friend and the director, Marta offers a generous and courageous perspective to a taboo subject: adolescent abortion.</p><p>&nbsp;</p><p>Doc Around Europe Award, DocsBarcelona&nbsp;<br>Thessaloniki International Documentary Film Festival<br>&nbsp;</p>",
+  "synopsis_lang": {
+    "en": "<p>After years of silence about the abortion she experienced as a teenager, Marta receives a hundred anonymous testimonies from women who have gone through the same experience. Bringing these stories to the screen, along with six girls who give a voice and a face to these silenced accounts, she creates a shared space where what was once silenced becomes collective. Acting as a friend and the director, Marta offers a generous and courageous perspective to a taboo subject: adolescent abortion.</p><p>&nbsp;</p><p>Doc Around Europe Award, DocsBarcelona&nbsp;<br>Thessaloniki International Documentary Film Festival<br>&nbsp;</p>",
+    "zh_hk": "<p>不受命令就是一種最壞名字——中學懷孕、墮胎，原以為只是個人的身體抉擇，卻往往令女孩淪為社會道德審判的箭靶，成為孤立無援的起點。從看見驗孕棒雙紅線的震驚、向父母坦白的尷尬，與男友拉鋸，到最終墮胎，每個故事的主角不同，卻承載相同的徬徨、孤寂與勇氣。曾有相似經歷的導演收集這些女孩的自白，拋開紀錄片的框架，找來六個同樣被迫一夜長大的女生，以溫柔而堅定的語調，述說和重演她們禁忌般的青春，解開久未釋懷的創傷，為自己發聲。</p><p>&nbsp;</p><p>巴塞隆納國際紀錄片電影節 Doc Around Europe獎<br>塞薩洛尼基國際紀錄片電影節<br>&nbsp;</p>"
+  },
+  "category": null,
+  "duration": 85,
+  "releaseDate": "2026-07-23T00:00:00.000Z",
+  "genres": [
+    "Documentary"
+  ],
+  "director": "Marta Duran Lozano",
+  "director_lang": {
+    "en": "Marta Duran Lozano",
+    "zh_hk": "Marta Duran Lozano"
+  },
+  "cast": "",
+  "cast_lang": {
+    "en": "",
+    "zh_hk": ""
+  },
+  "dialect": "Catalan",
+  "dialect_lang": {
+    "en": "Catalan",
+    "zh_hk": "加泰羅尼亞語"
+  },
+  "subtitle": "English",
+  "subtitle_lang": {
+    "en": "English",
+    "zh_hk": "英文"
+  },
+  "poster": "programKt_9d71c040-0db5-4b5e-b1e6-73876bd1c540.jpg",
+  "landscapeImages": [],
+  "trailer": "",
+  "website": "",
+  "featured": false,
+  "active": true,
+  "numSchedules": 0,
+  "maxTime": "2026-08-09T05:30:00.000Z",
+  "tags": [],
+  "hkta": true,
+  "createdAt": "2026-07-01T03:23:49.168Z",
+  "updatedAt": "2026-07-03T04:17:17.016Z"
+}

@@ -1,0 +1,52 @@
+{
+  "id": 163,
+  "movieId": "",
+  "masterId": "O-09892",
+  "extId": "17467",
+  "slug": "heat-4k-restoration",
+  "title": "HEAT (4K Restoration)",
+  "title_lang": {
+    "en": "HEAT (4K Restoration)",
+    "zh_hk": "盜火線 (4K修復版)"
+  },
+  "synopsis": "Heat is a gripping crime thriller directed by Michael Mann, starring Academy Award® winners Al Pacino and Robert De Niro. Neil McCauley (Robert De Niro), a highly skilled and disciplined professional thief who leads a crew specializing in high-stakes heists across Los Angeles. On the other side is Vincent Hanna (Al Pacino), a relentless LAPD detective whose dedication to his job matches McCauley’s commitment to his criminal craft.\n\nAs McCauley and his crew plan their biggest score yet, Hanna and his team close in, leading to an intense game of cat and mouse. Both men struggle to balance their personal lives with their professional obsessions, blurring the lines between hunter and hunted. The film builds to a climactic confrontation, exploring themes of loyalty, sacrifice, and the thin line separating lawmen from lawbreakers.\n\nRenowned for its realistic action sequences, complex characters, and the legendary face-off between Pacino and De Niro, Heat is considered a landmark in the crime genre.",
+  "synopsis_lang": {},
+  "category": "IIB",
+  "duration": 170,
+  "releaseDate": "2025-09-21T00:00:00.000Z",
+  "genres": [
+    "Crime"
+  ],
+  "director": "Michael Mann",
+  "director_lang": {
+    "en": "Michael Mann",
+    "zh_hk": "米高·曼"
+  },
+  "cast": "Al Pacino, Robert De Niro, Val Kilmer, Jon Voight, Tom Sizemore, Ashley Judd, Amy Brenneman, Natalie Portman",
+  "cast_lang": {
+    "en": "Al Pacino, Robert De Niro, Val Kilmer, Jon Voight, Tom Sizemore, Ashley Judd, Amy Brenneman, Natalie Portman",
+    "zh_hk": "阿爾柏仙奴、羅拔迪尼路、韋基馬、莊威、湯薜斯摩亞、艾絲莉茱迪、艾美·布倫妮曼、妮妲莉寶雯"
+  },
+  "dialect": "English",
+  "dialect_lang": {
+    "en": "English",
+    "zh_hk": "英文"
+  },
+  "subtitle": "Chinese",
+  "subtitle_lang": {
+    "en": "Chinese",
+    "zh_hk": "中文"
+  },
+  "poster": "programhd_6b2f1b09-a838-44c4-bdde-e278cf754b6b.jpg",
+  "landscapeImages": [],
+  "trailer": "",
+  "website": "",
+  "featured": false,
+  "active": true,
+  "numSchedules": 0,
+  "maxTime": "2026-07-26T05:00:00.000Z",
+  "tags": [],
+  "hkta": true,
+  "createdAt": "2025-10-25T03:44:08.000Z",
+  "updatedAt": "2026-01-27T12:54:40.076Z"
+}

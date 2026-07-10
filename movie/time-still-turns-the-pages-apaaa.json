@@ -1,0 +1,53 @@
+{
+  "id": 998,
+  "movieId": "",
+  "masterId": "",
+  "extId": "",
+  "slug": "time-still-turns-the-pages-apaaa",
+  "title": "Time Still Turns the Pages (APAAA)",
+  "title_lang": {
+    "en": "Time Still Turns the Pages (APAAA)",
+    "zh_hk": "年少日記 (APAAA)"
+  },
+  "synopsis": "<p>High school teacher Cheng looks back to his repressed childhood memories, as he finds an anonymous suicide note in the classroom. He strives hard to prevent another tragedy from happening, meanwhile facing a series of family problems, his wife is divorcing him, and his father is dying.</p>",
+  "synopsis_lang": {
+    "en": "<p>High school teacher Cheng looks back to his repressed childhood memories, as he finds an anonymous suicide note in the classroom. He strives hard to prevent another tragedy from happening, meanwhile facing a series of family problems, his wife is divorcing him, and his father is dying.</p>",
+    "zh_hk": "<p>一封沒署名的遺書、一羣看似無恙的學生，讓中學老師鄭Sir（盧鎮業 飾）想起充滿暴力與遺憾的童年往事。他亦面對妻子（陳漢娜 飾）離別、父親（鄭中基 飾）病危，同時必須找出企圖輕生的同學，阻止悲劇重現。</p>"
+  },
+  "category": null,
+  "duration": 95,
+  "releaseDate": "2026-11-16T00:00:00.000Z",
+  "genres": [],
+  "director": "Nick Cheuk",
+  "director_lang": {
+    "en": "Nick Cheuk",
+    "zh_hk": "卓亦謙"
+  },
+  "cast": "Lo Chun Yip, Ronald Cheng Chung-Kei, Hanna Chan",
+  "cast_lang": {
+    "en": "Lo Chun Yip, Ronald Cheng Chung-Kei, Hanna Chan",
+    "zh_hk": "盧鎮業、鄭中基、陳漢娜"
+  },
+  "dialect": "Cantonese",
+  "dialect_lang": {
+    "en": "Cantonese",
+    "zh_hk": "粵語"
+  },
+  "subtitle": "Chinese,English",
+  "subtitle_lang": {
+    "en": "Chinese,English",
+    "zh_hk": "中文,英文"
+  },
+  "poster": "programkt_334a6dee-9d02-4403-8335-478687c23396.jpg",
+  "landscapeImages": [],
+  "trailer": "",
+  "website": "",
+  "featured": false,
+  "active": true,
+  "numSchedules": 0,
+  "maxTime": "2026-11-16T11:15:00.000Z",
+  "tags": [],
+  "hkta": true,
+  "createdAt": "2026-06-25T10:42:02.864Z",
+  "updatedAt": "2026-07-06T10:02:05.000Z"
+}

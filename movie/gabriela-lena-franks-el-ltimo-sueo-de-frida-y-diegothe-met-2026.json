@@ -1,0 +1,50 @@
+{
+  "id": 492,
+  "movieId": "",
+  "masterId": "",
+  "extId": "",
+  "slug": "gabriela-lena-franks-el-ltimo-sueo-de-frida-y-diegothe-met-2026",
+  "title": "Gabriela Lena Frank’s El Último Sueño de Frida y Diego(The Met 2026)",
+  "title_lang": {
+    "en": "Gabriela Lena Frank’s El Último Sueño de Frida y Diego(The Met 2026)",
+    "zh_hk": "加布里埃拉．萊娜．弗蘭克《芙烈達和迭戈的最後之夢》(The Met 2026)"
+  },
+  "synopsis": "$2b",
+  "synopsis_lang": {},
+  "category": null,
+  "duration": 183,
+  "releaseDate": "2026-10-11T00:00:00.000Z",
+  "genres": [],
+  "director": "Deborah Colker",
+  "director_lang": {
+    "en": "Deborah Colker",
+    "zh_hk": "黛博拉．科爾克"
+  },
+  "cast": "Isabel Leonard, Carlos Álvarez",
+  "cast_lang": {
+    "en": "Isabel Leonard, Carlos Álvarez",
+    "zh_hk": "伊莎貝爾．倫納德、卡洛斯．阿爾瓦雷斯"
+  },
+  "dialect": "Spanish",
+  "dialect_lang": {
+    "en": "Spanish",
+    "zh_hk": "西班牙語"
+  },
+  "subtitle": "English",
+  "subtitle_lang": {
+    "en": "English",
+    "zh_hk": "英文"
+  },
+  "poster": "programyj_3051625e-e422-48fe-80fd-c275d0fb85c1.png",
+  "landscapeImages": [],
+  "trailer": "",
+  "website": "",
+  "featured": false,
+  "active": true,
+  "numSchedules": 0,
+  "maxTime": "2026-10-11T08:00:00.000Z",
+  "tags": [],
+  "hkta": true,
+  "createdAt": "2025-12-16T04:30:56.000Z",
+  "updatedAt": "2025-12-16T04:33:34.000Z"
+}

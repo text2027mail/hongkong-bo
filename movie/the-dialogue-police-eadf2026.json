@@ -1,0 +1,55 @@
+{
+  "id": 1025,
+  "movieId": "",
+  "masterId": "",
+  "extId": "",
+  "slug": "the-dialogue-police-eadf2026",
+  "title": "The Dialogue Police (EADF2026) ",
+  "title_lang": {
+    "en": "The Dialogue Police (EADF2026) ",
+    "zh_hk": "警察講數隊 (EADF2026)  "
+  },
+  "synopsis": "<p>Demonstrations. Quran burnings. Climate actions. At the eye of the storm stands a dedicated unit of Swedish police officers tasked with a vital mission: safeguarding everyone’s right to free speech. In a deeply polarized society where conflicts threaten to tear communities apart, this motley crew of strong-willed individuals navigates tense frontlines with humour and profound humanism. United by a shared calling, these officers risk it all to protect democracy, proving that dialogue remains our most powerful weapon against repression.</p><p>&nbsp;</p><p>CPH:DOX<br>Best Editing, Guldbagge Awards<br>&nbsp;</p>",
+  "synopsis_lang": {
+    "en": "<p>Demonstrations. Quran burnings. Climate actions. At the eye of the storm stands a dedicated unit of Swedish police officers tasked with a vital mission: safeguarding everyone’s right to free speech. In a deeply polarized society where conflicts threaten to tear communities apart, this motley crew of strong-willed individuals navigates tense frontlines with humour and profound humanism. United by a shared calling, these officers risk it all to protect democracy, proving that dialogue remains our most powerful weapon against repression.</p><p>&nbsp;</p><p>CPH:DOX<br>Best Editing, Guldbagge Awards<br>&nbsp;</p>",
+    "zh_hk": "<p>瑞典有一支不靠槍和手銬，唯一武器是「講道理」的特殊警隊。這隊警察講數隊的任務不是逮捕和鎮壓，而是傾聽，遊走於火爆的示威街頭，充當示威者與體制之間的橋樑，用對話阻止暴力升級。電影深入警隊訓練過程、實際執勤的拉鋸現場，甚至記錄了他們與家人、同事之間的反思和對話。在立場非黑即白、網絡公審盛行的今天，再三思考一個最無奈的時代命題：當所有人都走往極端，「坐低慢慢傾」到底是一底情願的民主童話，抑或真正守護自由的力量？</p><p>&nbsp;</p><p>哥本哈根國際紀錄片電影節<br>瑞典金甲蟲獎 最佳剪接<br>&nbsp;</p>"
+  },
+  "category": null,
+  "duration": 93,
+  "releaseDate": "2026-07-28T00:00:00.000Z",
+  "genres": [
+    "Documentary"
+  ],
+  "director": "Susanna Edwards",
+  "director_lang": {
+    "en": "Susanna Edwards",
+    "zh_hk": "Susanna Edwards"
+  },
+  "cast": "",
+  "cast_lang": {
+    "en": "",
+    "zh_hk": ""
+  },
+  "dialect": "Swedish,Turkish,English",
+  "dialect_lang": {
+    "en": "Swedish,Turkish,English",
+    "zh_hk": "瑞典語,土耳其語,英文"
+  },
+  "subtitle": "English",
+  "subtitle_lang": {
+    "en": "English",
+    "zh_hk": "英文"
+  },
+  "poster": "programLt_f30ba12f-cee9-4791-a0ef-62cd1a2f1cfd.jpg",
+  "landscapeImages": [],
+  "trailer": "",
+  "website": "",
+  "featured": false,
+  "active": true,
+  "numSchedules": 0,
+  "maxTime": "2026-08-08T05:30:00.000Z",
+  "tags": [],
+  "hkta": true,
+  "createdAt": "2026-07-01T03:24:30.144Z",
+  "updatedAt": "2026-07-03T04:17:37.112Z"
+}

@@ -1,0 +1,50 @@
+{
+  "id": 1020,
+  "movieId": "",
+  "masterId": "",
+  "extId": "",
+  "slug": "mr-nobody-against-putin-eadf2026",
+  "title": "Mr. Nobody Against Putin (EADF2026) ",
+  "title_lang": {
+    "en": "Mr. Nobody Against Putin (EADF2026) ",
+    "zh_hk": "無名氏先生 (EADF2026) "
+  },
+  "synopsis": "<p>\"I love my motherland, everything here.\" In Karabash, a polluted Russian town, beloved teacher and videographer Pavel Talankin watches his school become a state propaganda tool. Forced to promote official messages and horrified as his graduating students are recruited for war, Pavel is torn between compliance and conscience. To protect the children, he secretly documents the truth, becoming an international whistleblower. With his life at risk, he must make a dangerous escape. In an era where patriotism is weaponized, where does this \"nobody\" go from here?</p><p>&nbsp;</p><p>Best Documentary Feature, Academy Awards<br>Best Documentary, BAFTA Film Awards<br>Special Jury Prize for World Documentary Films, Sundance Film Festival<br>&nbsp;</p>",
+  "synopsis_lang": {},
+  "category": null,
+  "duration": 90,
+  "releaseDate": "2026-07-27T00:00:00.000Z",
+  "genres": [],
+  "director": "David Borenstein, Pavel Talankin",
+  "director_lang": {
+    "en": "David Borenstein, Pavel Talankin",
+    "zh_hk": "David Borenstein, Pavel Talankin"
+  },
+  "cast": "",
+  "cast_lang": {
+    "en": "",
+    "zh_hk": ""
+  },
+  "dialect": "Russian",
+  "dialect_lang": {
+    "en": "Russian",
+    "zh_hk": "俄語"
+  },
+  "subtitle": "English",
+  "subtitle_lang": {
+    "en": "English",
+    "zh_hk": "英文"
+  },
+  "poster": "programGt_398ae392-e224-44b4-9c90-3542f7051227.jpg",
+  "landscapeImages": [],
+  "trailer": "",
+  "website": "",
+  "featured": false,
+  "active": true,
+  "numSchedules": 0,
+  "maxTime": "2026-08-08T09:35:00.000Z",
+  "tags": [],
+  "hkta": true,
+  "createdAt": "2026-07-01T03:20:23.671Z",
+  "updatedAt": "2026-07-03T04:34:27.633Z"
+}

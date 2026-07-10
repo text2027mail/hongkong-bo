@@ -1,0 +1,56 @@
+{
+  "id": 959,
+  "movieId": "",
+  "masterId": "",
+  "extId": "",
+  "slug": "about-time-sol",
+  "title": "About Time (SoL)",
+  "title_lang": {
+    "en": "About Time (SoL)",
+    "zh_hk": "回到最愛的一天 (SoL)"
+  },
+  "synopsis": "<p>At the age of 21, Tim Lake discovers he can travel in time… But as his unusual life progresses, Tim finds out that his unique gift can’t save him from the sorrows and ups and downs that affect all families, everywhere. There are great limits to what time travel can achieve, and it can be dangerous too. About Time is a comedy about love and time travel, which discovers that, in the end, making the most of life may not need time travel at all.</p>",
+  "synopsis_lang": {
+    "en": "<p>At the age of 21, Tim Lake discovers he can travel in time… But as his unusual life progresses, Tim finds out that his unique gift can’t save him from the sorrows and ups and downs that affect all families, everywhere. There are great limits to what time travel can achieve, and it can be dangerous too. About Time is a comedy about love and time travel, which discovers that, in the end, making the most of life may not need time travel at all.</p>",
+    "zh_hk": "<p>21歲的戇男阿添外表平凡，突然得知自己擁有穿越時空的能力，決定回到過去追求夢中女神瑪莉，由蝦碌小生變成浪漫達人，試圖用超能力將愛情路上每個時刻變得盡善盡美。可惜阿添忘了蝴蝶效應的道理，一個小改變足以改寫歷史，不停在時空中穿插、重重覆覆的更正，使他生活變得更複雜，阿添更開始意識到，儘管他有一個完美的婚禮、一個近乎完美的家庭，但原來並非所有事情他都能改變…</p>"
+  },
+  "category": "IIA",
+  "duration": 123,
+  "releaseDate": "2026-07-04T00:00:00.000Z",
+  "genres": [
+    "Drama",
+    "Romance"
+  ],
+  "director": "Richard Curtis",
+  "director_lang": {
+    "en": "Richard Curtis",
+    "zh_hk": "李察寇蒂斯"
+  },
+  "cast": "Domhnall Gleeson, Rachel McAdams",
+  "cast_lang": {
+    "en": "Domhnall Gleeson, Rachel McAdams",
+    "zh_hk": "當勞格利遜、麗素麥雅當絲"
+  },
+  "dialect": "English",
+  "dialect_lang": {
+    "en": "English",
+    "zh_hk": "英文"
+  },
+  "subtitle": "Chinese",
+  "subtitle_lang": {
+    "en": "Chinese",
+    "zh_hk": "中文"
+  },
+  "poster": "programxs_00f9ad3e-f99d-4ff4-a2d8-b23f47d7c453.jpg",
+  "landscapeImages": [],
+  "trailer": "",
+  "website": "",
+  "featured": false,
+  "active": true,
+  "numSchedules": 0,
+  "maxTime": "2026-07-14T11:30:00.000Z",
+  "tags": [],
+  "hkta": true,
+  "createdAt": "2026-06-17T10:47:00.381Z",
+  "updatedAt": "2026-06-18T08:54:26.785Z"
+}

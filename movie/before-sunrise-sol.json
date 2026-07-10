@@ -1,0 +1,56 @@
+{
+  "id": 956,
+  "movieId": "",
+  "masterId": "",
+  "extId": "",
+  "slug": "before-sunrise-sol",
+  "title": "Before Sunrise (SoL)",
+  "title_lang": {
+    "en": "Before Sunrise (SoL)",
+    "zh_hk": "情留半天 (SoL)"
+  },
+  "synopsis": "<p>Jesse and Celine star as two young people who meet--and whose lives are forever changed--on a train. They may have only one night, but when soul mates find each other, anything can happen Before Sunrise.</p>",
+  "synopsis_lang": {
+    "en": "<p>Jesse and Celine star as two young people who meet--and whose lives are forever changed--on a train. They may have only one night, but when soul mates find each other, anything can happen Before Sunrise.</p>",
+    "zh_hk": "<p>男主角謝西與女主角莎蓮偶然邂逅並相談甚歡。謝西原應先行獨自在維也納下車，等待隔天飛回美國的班機；莎蓮則預備回到巴黎。然而在同感相見恨晚與意猶未盡之下，兩人決定一起在維也納下車，共同度過剩下的時光。</p>"
+  },
+  "category": "IIA",
+  "duration": 101,
+  "releaseDate": "2026-07-02T00:00:00.000Z",
+  "genres": [
+    "Drama",
+    "Romance"
+  ],
+  "director": "Richard Linklater",
+  "director_lang": {
+    "en": "Richard Linklater",
+    "zh_hk": "李察連利加"
+  },
+  "cast": "Ethan Hawke, Julie Delpy",
+  "cast_lang": {
+    "en": "Ethan Hawke, Julie Delpy",
+    "zh_hk": "伊雲鶴基、茱麗蝶兒"
+  },
+  "dialect": "English,French,German",
+  "dialect_lang": {
+    "en": "English,French,German",
+    "zh_hk": "英文,法語,德語"
+  },
+  "subtitle": "Chinese",
+  "subtitle_lang": {
+    "en": "Chinese",
+    "zh_hk": "中文"
+  },
+  "poster": "programus_72517002-5591-4b40-a3dc-7a8a2d24ffc2.jpg",
+  "landscapeImages": [],
+  "trailer": "",
+  "website": "",
+  "featured": false,
+  "active": true,
+  "numSchedules": 0,
+  "maxTime": "2026-07-12T11:35:00.000Z",
+  "tags": [],
+  "hkta": true,
+  "createdAt": "2026-06-17T10:40:01.053Z",
+  "updatedAt": "2026-06-30T07:38:15.377Z"
+}

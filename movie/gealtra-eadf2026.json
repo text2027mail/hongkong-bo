@@ -1,0 +1,50 @@
+{
+  "id": 1018,
+  "movieId": "",
+  "masterId": "",
+  "extId": "",
+  "slug": "gealtra-eadf2026",
+  "title": "Gealtra (EADF2026) ",
+  "title_lang": {
+    "en": "Gealtra (EADF2026) ",
+    "zh_hk": "愛爾蘭嘻哈少年團 (EADF2026) "
+  },
+  "synopsis": "<p>Set in the vibrant heart of Knocknaheeny, award-winning young director Brendan Canty follows a group of teenagers from The Kabin Studio, a youth-led creativity hub, as they embark on a journey to explore their identities through music, poetry, and the Irish language. Under the mentorship of renowned rapper Séamus Barra Ó Súilleabháin, the young participants dive deep into their personal histories, cultural heritage, and the power of creative expression. Through observing the impact The Kabin has on these young people, the film reveals a story of inclusivity, joy, and the life-changing power of community and self-expression.</p><p>&nbsp;</p><p>Best New Irish Feature Film Award, Cork International Film Festival<br>Filmfest München</p>",
+  "synopsis_lang": {},
+  "category": null,
+  "duration": 70,
+  "releaseDate": "2026-07-22T00:00:00.000Z",
+  "genres": [],
+  "director": "Brendan Canty",
+  "director_lang": {
+    "en": "Brendan Canty",
+    "zh_hk": "Brendan Canty"
+  },
+  "cast": "",
+  "cast_lang": {
+    "en": "",
+    "zh_hk": ""
+  },
+  "dialect": "Irish,English",
+  "dialect_lang": {
+    "en": "Irish,English",
+    "zh_hk": "愛爾蘭語,英文"
+  },
+  "subtitle": "English",
+  "subtitle_lang": {
+    "en": "English",
+    "zh_hk": "英文"
+  },
+  "poster": "programEt_d504e5d5-1778-4214-a002-257415c83a8e.jpg",
+  "landscapeImages": [],
+  "trailer": "",
+  "website": "",
+  "featured": false,
+  "active": true,
+  "numSchedules": 0,
+  "maxTime": "2026-08-02T07:20:00.000Z",
+  "tags": [],
+  "hkta": true,
+  "createdAt": "2026-07-01T03:18:57.146Z",
+  "updatedAt": "2026-07-03T04:15:13.612Z"
+}

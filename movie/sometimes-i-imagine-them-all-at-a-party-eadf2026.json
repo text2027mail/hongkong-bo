@@ -1,0 +1,53 @@
+{
+  "id": 1023,
+  "movieId": "",
+  "masterId": "",
+  "extId": "",
+  "slug": "sometimes-i-imagine-them-all-at-a-party-eadf2026",
+  "title": "Sometimes, I Imagine Them All at a Party (EADF2026) ",
+  "title_lang": {
+    "en": "Sometimes, I Imagine Them All at a Party (EADF2026) ",
+    "zh_hk": "溫柔的餘燼 (EADF2026) "
+  },
+  "synopsis": "<p>Fourteen years ago, the director survived an attempted femicide perpetrated by a classmate. In the film, she revisits those memories once more. Fragmentary scenes speak of warmth and hope, but also of coldness and brutality. Moving between Munich and Rio de Janeiro, she seeks encounters with people from her past: a teacher, classmate, doctor, detective, prosecutor, her half-sister, and a friend. These conversations raise urgent questions about responsibility, both of individuals and the social structures within which they act.</p><p>&nbsp;</p><p>Special Mention: Documentary Award, Berlin International Film Festival<br>DOK.fest München</p>",
+  "synopsis_lang": {
+    "en": "<p>Fourteen years ago, the director survived an attempted femicide perpetrated by a classmate. In the film, she revisits those memories once more. Fragmentary scenes speak of warmth and hope, but also of coldness and brutality. Moving between Munich and Rio de Janeiro, she seeks encounters with people from her past: a teacher, classmate, doctor, detective, prosecutor, her half-sister, and a friend. These conversations raise urgent questions about responsibility, both of individuals and the social structures within which they act.</p><p>&nbsp;</p><p>Special Mention: Documentary Award, Berlin International Film Festival<br>DOK.fest München</p>",
+    "zh_hk": "<p>14年前，仍是高中生的導演遭遇男同學騷擾及意圖謀殺而差點喪命。事隔多年，她決定在記憶模糊前直面過去，穿梭慕尼黑與里約熱內盧，尋訪當年的老師、同學、醫生、警探、檢察官以及至親。透過冷靜而理性的對話，她重新叩問每個人當年的行動與沉默。影片融合私密的感受與對社會的反思，將視野從罪行本身放大至縱容性別暴力的社會與體制環境，在面對結構性暴力的同時，也於冰冷現實之中，為溫柔、責任與同理心尋找容身之地。</p><p>&nbsp;</p><p>柏林影展 紀錄片評審團特別表揚<br>慕尼黑紀錄片電影節</p>"
+  },
+  "category": null,
+  "duration": 91,
+  "releaseDate": "2026-07-25T00:00:00.000Z",
+  "genres": [],
+  "director": "Daniela Magnani Hüller",
+  "director_lang": {
+    "en": "Daniela Magnani Hüller",
+    "zh_hk": "Daniela Magnani Hüller"
+  },
+  "cast": "",
+  "cast_lang": {
+    "en": "",
+    "zh_hk": ""
+  },
+  "dialect": "German,Portuguese",
+  "dialect_lang": {
+    "en": "German,Portuguese",
+    "zh_hk": "德語,葡萄牙語"
+  },
+  "subtitle": "English",
+  "subtitle_lang": {
+    "en": "English",
+    "zh_hk": "英文"
+  },
+  "poster": "programJt_8bd3825e-c4aa-4ace-a5f7-74f62e62a54e.jpg",
+  "landscapeImages": [],
+  "trailer": "",
+  "website": "",
+  "featured": false,
+  "active": true,
+  "numSchedules": 0,
+  "maxTime": "2026-08-04T11:50:00.000Z",
+  "tags": [],
+  "hkta": true,
+  "createdAt": "2026-07-01T03:22:53.258Z",
+  "updatedAt": "2026-07-03T04:16:48.377Z"
+}

@@ -1,0 +1,53 @@
+{
+  "id": 754,
+  "movieId": "",
+  "masterId": "",
+  "extId": "",
+  "slug": "a-pale-view-of-hills",
+  "title": "A Pale View of Hills",
+  "title_lang": {
+    "en": "A Pale View of Hills",
+    "zh_hk": "群山淡影"
+  },
+  "synopsis": "<p>In 1982 England, young writer Niki (Camilla Ako) returns home to visit her mother, Etsuko (Yo Yoshida), who has decided to sell the family house after years of loss. As they sift through old mementoes, memories of post-war Nagasaki 30 years ago resurface. Young Etsuko's (Suzu Hirose) story begins with her encounter with Sachiko (Fumi Nikaido), a mysterious woman longing to start anew abroad with her daughter. As Niki pieces together these recollections, she senses troubling inconsistencies in the story. Adapted from Nobel laureate Kazuo Ishiguro’s work and directed by Kei Ishikawa (A Man), the film weaves dual timelines to portray women’s struggles in the shadow of war, reflecting the collective trauma of a turbulent age. Un Certain Regard, Cannes.</p><p>&nbsp;</p><p>Un Certain Regard, Cannes Film Festival<br>BFI London Film Festival<br>&nbsp;</p>",
+  "synopsis_lang": {},
+  "category": "IIA",
+  "duration": 123,
+  "releaseDate": "2026-04-16T00:00:00.000Z",
+  "genres": [
+    "Drama",
+    "War"
+  ],
+  "director": "Kei Ishikawa",
+  "director_lang": {
+    "en": "Kei Ishikawa",
+    "zh_hk": "石川慶"
+  },
+  "cast": "Suzu Hirose, Fumi Nikaido, Yoh Yoshida, Camilla Aiko, Kouhei Matsushita, Tomokazu Miura",
+  "cast_lang": {
+    "en": "Suzu Hirose, Fumi Nikaido, Yoh Yoshida, Camilla Aiko, Kouhei Matsushita, Tomokazu Miura",
+    "zh_hk": "廣瀨鈴、二階堂富美、吉田羊、Camilla Aiko、松下洸平、三浦友和"
+  },
+  "dialect": "Japanese,English",
+  "dialect_lang": {
+    "en": "Japanese,English",
+    "zh_hk": "日語,英文"
+  },
+  "subtitle": "Chinese,English",
+  "subtitle_lang": {
+    "en": "Chinese,English",
+    "zh_hk": "中文,英文"
+  },
+  "poster": "programAo_c0921686-d86a-41e9-b352-0d529152cf0e.png",
+  "landscapeImages": [],
+  "trailer": "https://trailer.cinema.com.hk/trailer/2026-04-16APaleViewOfHills_TLR_LobbyTV.mp4",
+  "website": "",
+  "featured": false,
+  "active": true,
+  "numSchedules": 0,
+  "maxTime": "2026-07-18T07:20:00.000Z",
+  "tags": [],
+  "hkta": true,
+  "createdAt": "2026-03-31T04:46:02.087Z",
+  "updatedAt": "2026-06-26T06:21:33.000Z"
+}
