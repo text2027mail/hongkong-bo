@@ -1,0 +1,44 @@
+{
+  "Movie 479": {
+    "shows": 1,
+    "seats": 81,
+    "sold": 34,
+    "gross": 11900,
+    "dates": {
+      "2026-10-25": {
+        "shows": 1,
+        "seats": 81,
+        "sold": 34,
+        "gross": 11900
+      }
+    }
+  },
+  "Movie 997": {
+    "shows": 1,
+    "seats": 119,
+    "sold": 24,
+    "gross": 3600,
+    "dates": {
+      "2026-10-20": {
+        "shows": 1,
+        "seats": 119,
+        "sold": 24,
+        "gross": 3600
+      }
+    }
+  },
+  "Movie 492": {
+    "shows": 1,
+    "seats": 58,
+    "sold": 8,
+    "gross": 2320,
+    "dates": {
+      "2026-10-11": {
+        "shows": 1,
+        "seats": 58,
+        "sold": 8,
+        "gross": 2320
+      }
+    }
+  }
+}

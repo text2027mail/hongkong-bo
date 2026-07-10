@@ -1,0 +1,44 @@
+[
+  {
+    "perfIx": 121074,
+    "movie": "Movie 1021",
+    "venue": "Cinema.com.hk",
+    "date": "2026-08-07",
+    "time": "11:30",
+    "total": 127,
+    "available": 112,
+    "blocked": 0,
+    "sold": 15,
+    "gross": 1425,
+    "price": 95,
+    "last_updated": "2026-07-10 11:47:41 AM IST"
+  },
+  {
+    "perfIx": 121005,
+    "movie": "Movie 1015",
+    "venue": "Cinema.com.hk",
+    "date": "2026-08-07",
+    "time": "12:00",
+    "total": 119,
+    "available": 110,
+    "blocked": 0,
+    "sold": 9,
+    "gross": 1305,
+    "price": 145,
+    "last_updated": "2026-07-10 11:47:41 AM IST"
+  },
+  {
+    "perfIx": 123886,
+    "movie": "Movie 1000",
+    "venue": "Cinema.com.hk",
+    "date": "2026-08-07",
+    "time": "13:40",
+    "total": 127,
+    "available": 64,
+    "blocked": 0,
+    "sold": 63,
+    "gross": 5670,
+    "price": 90,
+    "last_updated": "2026-07-10 11:47:41 AM IST"
+  }
+]
