@@ -1,8 +1,7 @@
 import requests
 import json
 import os
-from datetime import datetime
-from zoneinfo import ZoneInfo
+from datetime import datetime, timedelta, timezone
 from collections import defaultdict
 
 URL = "https://www.cinema.com.hk/en/movie/ticketing"
@@ -25,7 +24,8 @@ HEADERS = {
     "user-agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 18_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.5 Mobile/15E148 Safari/604.1"
 }
 
-IST_TZ = ZoneInfo("Asia/Kolkata")
+IST_TZ = timezone(timedelta(hours=5, minutes=30))
+HK_TZ = timezone(timedelta(hours=8))
 RUN_TIME = datetime.now(IST_TZ).strftime("%Y-%m-%d %I:%M:%S %p IST")
 print("Run Time:", RUN_TIME)
 
@@ -36,10 +36,6 @@ def fetch_page():
 
 
 def extract_all_flight_strings(html):
-    """
-    Find all self.__next_f.push([1, " ... ") calls and extract the raw string content.
-    Returns a list of decoded strings.
-    """
     results = []
     pattern = 'self.__next_f.push([1,'
     start_pos = 0
@@ -47,11 +43,9 @@ def extract_all_flight_strings(html):
         start = html.find(pattern, start_pos)
         if start == -1:
             break
-        # Move to the opening quote
         quote_start = html.find('"', start)
         if quote_start == -1:
             break
-        # Start scanning after the quote
         i = quote_start + 1
         while i < len(html):
             if html[i] == '\\':
@@ -68,17 +62,12 @@ def extract_all_flight_strings(html):
             decoded = json.loads('"' + raw + '"')
             results.append(decoded)
         except json.JSONDecodeError:
-            # skip if it can't be decoded as a JSON string
             pass
         start_pos = end + 1
     return results
 
 
 def parse_payloads(payload_strings):
-    """
-    Parse all payload strings into a single dictionary mapping chunk ID to parsed data.
-    Each payload string contains multiple lines like "5:...".
-    """
     chunks = {}
     for payload in payload_strings:
         lines = payload.split('\n')
@@ -100,10 +89,6 @@ def parse_payloads(payload_strings):
 
 
 def resolve_reference(ref, chunks, root_data=None):
-    """
-    Resolve a reference string like "$5:1:props:children:props:movies:30".
-    If root_data is provided, it will be used as the starting point; otherwise, the chunk with the ID is used.
-    """
     if not isinstance(ref, str) or not ref.startswith('$'):
         return ref
     path = ref[1:]
@@ -132,9 +117,6 @@ def resolve_reference(ref, chunks, root_data=None):
 
 
 def find_key(data, target_key):
-    """
-    Recursively search for a key in the data and return its value (first found).
-    """
     if isinstance(data, dict):
         if target_key in data:
             return data[target_key]
@@ -151,9 +133,6 @@ def find_key(data, target_key):
 
 
 def build_movie_lookup(chunks):
-    """
-    Find the 'movies' list (a list of full movie objects) in any chunk and build a dict: movie_id -> movie object.
-    """
     for chunk_id, data in chunks.items():
         movies = find_key(data, 'movies')
         if movies and isinstance(movies, list):
@@ -166,41 +145,82 @@ def build_movie_lookup(chunks):
     return {}
 
 
-def parse_shows_from_array(shows_array, chunks, movie_lookup):
+def build_site_lookup(chunks):
+    """
+    Build a lookup dictionary from site id to site name.
+    We look for 'showSites' which contains site objects with id and name.
+    """
+    for chunk_id, data in chunks.items():
+        sites = find_key(data, 'showSites')
+        if sites and isinstance(sites, list):
+            lookup = {}
+            for site in sites:
+                if isinstance(site, dict) and 'id' in site and 'name' in site:
+                    lookup[site['id']] = site['name']
+            if lookup:
+                return lookup
+    # Fallback: try to find siteGroups and extract from items
+    for chunk_id, data in chunks.items():
+        groups = find_key(data, 'siteGroups')
+        if groups and isinstance(groups, list):
+            lookup = {}
+            for group in groups:
+                if isinstance(group, dict) and 'items' in group:
+                    for item in group['items']:
+                        if isinstance(item, dict) and 'site' in item:
+                            site = item['site']
+                            if isinstance(site, dict) and 'id' in site and 'name' in site:
+                                lookup[site['id']] = site['name']
+            if lookup:
+                return lookup
+    return {}
+
+
+def parse_shows_from_array(shows_array, chunks, movie_lookup, site_lookup):
     shows = []
     for show in shows_array:
         try:
             show_id = show["id"]
-            date = show["date"][:10]
-            time = show["time"][11:16] if len(show["time"]) >= 16 else show["time"]
+            # Date
+            date_str = show["date"]
+            date = date_str[:10]  # YYYY-MM-DD
+            # Time: convert UTC to HK time
+            time_str = show["time"]
+            # Parse UTC datetime (Z means UTC)
+            utc_dt = datetime.fromisoformat(time_str.replace('Z', '+00:00'))
+            hk_dt = utc_dt.astimezone(HK_TZ)
+            time_hm = hk_dt.strftime('%H:%M')  # 24-hour format, e.g., "00:00" for midnight
+
             price = show["price"]
             seats = show["seats"]
             sold = show["sold"]
+
+            # Movie
             movie_obj = show.get("movie")
-            # Resolve reference if needed
             if isinstance(movie_obj, str) and movie_obj.startswith('$'):
                 movie_obj = resolve_reference(movie_obj, chunks)
-            # Now movie_obj should be a dict
             if not isinstance(movie_obj, dict):
                 print(f"Warning: movie_obj is not a dict for show {show_id}: {movie_obj}")
                 continue
-            # Try to get the name
             movie_name = movie_obj.get("name")
-            # If name is missing, try to look up by id
             if not movie_name:
                 movie_id = movie_obj.get("id")
                 if movie_id is not None and movie_id in movie_lookup:
-                    full_movie = movie_lookup[movie_id]
-                    movie_name = full_movie.get("name", f"Movie {movie_id}")
+                    movie_name = movie_lookup[movie_id].get("name", f"Movie {movie_id}")
                 else:
                     movie_name = f"Movie {movie_id if movie_id is not None else 'unknown'}"
-            venue = show.get("site", {}).get("name", "Cinema.com.hk")
+
+            # Venue
+            site_obj = show.get("site", {})
+            site_id = site_obj.get("id")
+            venue = site_lookup.get(site_id, f"Site {site_id}") if site_id is not None else "Cinema.com.hk"
+
             shows.append({
                 "perfIx": show_id,
                 "movie": movie_name,
                 "venue": venue,
                 "date": date,
-                "time": time,
+                "time": time_hm,
                 "total": seats,
                 "available": seats - sold,
                 "blocked": 0,
@@ -340,11 +360,13 @@ def main():
     chunks = parse_payloads(all_strings)
     print(f"Parsed {len(chunks)} chunks.")
 
-    # Build movie lookup from the movies list
+    # Build lookups
     movie_lookup = build_movie_lookup(chunks)
     print(f"Found {len(movie_lookup)} unique movies.")
+    site_lookup = build_site_lookup(chunks)
+    print(f"Found {len(site_lookup)} unique venues.")
 
-    # Find the shows array in any chunk
+    # Find the shows array
     shows_array = None
     for chunk_id, data in chunks.items():
         shows = find_key(data, 'shows')
@@ -357,7 +379,7 @@ def main():
         return
 
     print(f"Found shows array with {len(shows_array)} entries.")
-    shows = parse_shows_from_array(shows_array, chunks, movie_lookup)
+    shows = parse_shows_from_array(shows_array, chunks, movie_lookup, site_lookup)
     print("Shows scraped:", len(shows))
 
     if shows:
