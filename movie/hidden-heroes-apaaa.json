@@ -1,0 +1,50 @@
+{
+  "id": 999,
+  "movieId": "",
+  "masterId": "",
+  "extId": "",
+  "slug": "hidden-heroes-apaaa",
+  "title": "Hidden Heroes (APAAA)",
+  "title_lang": {
+    "en": "Hidden Heroes (APAAA)",
+    "zh_hk": "追擊8月15 (APAAA)"
+  },
+  "synopsis": "<p>Officer Yohji Ho meets a female android who comes from the future, in a drug raid. The android's mission is to ensure the death of Yohji, the elder brother of the future \"Father of electronic Chips\", so as to help the future scientist to become what he will be. At the meantime, Yohji is suspected as the murderer of a police officer. Scared and confused, Yohji flees and goes to Mei Ling, who looks identical to the android, for a fraud passport. Knowing Mei Ling is his brother's future wife, Yohji decides to kill her to save his own life. Being pursued by the police and the android, Yohji runs away with Mei Ling and starts their adventure.<br>&nbsp;</p>",
+  "synopsis_lang": {},
+  "category": null,
+  "duration": 114,
+  "releaseDate": "2026-12-07T00:00:00.000Z",
+  "genres": [],
+  "director": "Joe Ma Wai-Ho, Soi Cheang",
+  "director_lang": {
+    "en": "Joe Ma Wai-Ho, Soi Cheang",
+    "zh_hk": "馬偉豪、鄭保瑞"
+  },
+  "cast": "Ronald Cheng, Charlene Choi",
+  "cast_lang": {
+    "en": "Ronald Cheng, Charlene Choi",
+    "zh_hk": "鄭中基、蔡卓妍"
+  },
+  "dialect": "Cantonese",
+  "dialect_lang": {
+    "en": "Cantonese",
+    "zh_hk": "粵語"
+  },
+  "subtitle": "Chinese,English",
+  "subtitle_lang": {
+    "en": "Chinese,English",
+    "zh_hk": "中文,英文"
+  },
+  "poster": "programlt_c7d341a0-f1a3-4baf-bf9a-18f8a2047109.jpg",
+  "landscapeImages": [],
+  "trailer": "",
+  "website": "",
+  "featured": false,
+  "active": true,
+  "numSchedules": 0,
+  "maxTime": "2026-12-07T11:00:00.000Z",
+  "tags": [],
+  "hkta": true,
+  "createdAt": "2026-06-25T10:42:21.531Z",
+  "updatedAt": "2026-07-06T10:01:59.000Z"
+}

@@ -1,0 +1,55 @@
+{
+  "id": 983,
+  "movieId": "",
+  "masterId": "",
+  "extId": "",
+  "slug": "galaxy-writer-bcsunday",
+  "title": "Galaxy Writer (bcSunday)",
+  "title_lang": {
+    "en": "Galaxy Writer (bcSunday)",
+    "zh_hk": "銀河寫手 (bcSunday)"
+  },
+  "synopsis": "<p>A group of young people dreaming of becoming directors, screenwriters, actors, producers, and more. Among them were two screenwriters, Zhang Liaoyi and Sun Tan. They wrote a movie script that they believed would go down in history and were determined to bring it to the big screen. Galaxy Writer, the winner of the Grand Jury Prize at the FIRST International Film Festival, is a tribute to this community that the two up-and-coming directors most familiar with: screenwriters</p>",
+  "synopsis_lang": {
+    "en": "<p>A group of young people dreaming of becoming directors, screenwriters, actors, producers, and more. Among them were two screenwriters, Zhang Liaoyi and Sun Tan. They wrote a movie script that they believed would go down in history and were determined to bring it to the big screen. Galaxy Writer, the winner of the Grand Jury Prize at the FIRST International Film Festival, is a tribute to this community that the two up-and-coming directors most familiar with: screenwriters</p>",
+    "zh_hk": "<p>張了一和孫談懷着編劇夢，寫出了自認為可以名垂青史的原創電影劇本《七秒人》。在一群「貴圈真亂」的豬朋狗友幫助下，四出尋找資方和製片人撲水，試圖拍成電影搬上大銀幕。熱血的尋夢路途就像星期一到星期五般遙遠，滿懷理想的創作人多如銀河繁星，長伴在旁的不只有拍檔，還有改了千遍的草稿。這是一齣「編劇L」的生存圖鑑，也是當代打工仔的生存啓示錄。新導演李闊及單丹丹一鳴驚人的瘋狂喜劇，獲得周星馳及姜文盛讚，更勇奪FIRST青年影展評委會大獎。</p>"
+  },
+  "category": "IIA",
+  "duration": 104,
+  "releaseDate": "2026-07-12T00:00:00.000Z",
+  "genres": [
+    "Drama"
+  ],
+  "director": "Li Kuo, Shan Dandan",
+  "director_lang": {
+    "en": "Li Kuo, Shan Dandan",
+    "zh_hk": "李闊、單丹丹"
+  },
+  "cast": "Song Muzi, He Wenjun, Li Fei",
+  "cast_lang": {
+    "en": "Song Muzi, He Wenjun, Li Fei",
+    "zh_hk": "宋木子、合文俊、李飛"
+  },
+  "dialect": "Mandarin",
+  "dialect_lang": {
+    "en": "Mandarin",
+    "zh_hk": "普通話"
+  },
+  "subtitle": "Chinese,English",
+  "subtitle_lang": {
+    "en": "Chinese,English",
+    "zh_hk": "中文,英文"
+  },
+  "poster": "programVs_b3d01a5b-ea02-44a4-b9d1-eeb2fd1c93e1.jpg",
+  "landscapeImages": [],
+  "trailer": "",
+  "website": "",
+  "featured": false,
+  "active": true,
+  "numSchedules": 0,
+  "maxTime": "2026-07-15T11:30:00.000Z",
+  "tags": [],
+  "hkta": true,
+  "createdAt": "2026-06-23T03:24:55.933Z",
+  "updatedAt": "2026-06-26T06:57:56.011Z"
+}

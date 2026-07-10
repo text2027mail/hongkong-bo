@@ -1,0 +1,55 @@
+{
+  "id": 1027,
+  "movieId": "",
+  "masterId": "",
+  "extId": "",
+  "slug": "traces-eadf2026",
+  "title": "Traces (EADF2026) ",
+  "title_lang": {
+    "en": "Traces (EADF2026) ",
+    "zh_hk": "傷痕之下 (EADF2026) "
+  },
+  "synopsis": "<p>In war-torn Ukraine, sexual violence and torture are systematically weaponized to shatter lives. Refusing to remain silent, former captive turned activist Iryna Dovhan journeys through newly de-occupied territories to document the harrowing accounts of fellow survivors. Directed by a wartime survivor herself, this powerful documentary weaves a portrait of collective trauma, capturing not just a record of war crimes, but a fierce, unified crusade of women transforming deep personal pain into transformative justice. Asian Premiere.</p><p>&nbsp;</p><p>Panorama Audience Award, Berlin International Film Festival<br>CPH:DOX<br>Sydney Film Festival<br>&nbsp;</p>",
+  "synopsis_lang": {
+    "en": "<p>In war-torn Ukraine, sexual violence and torture are systematically weaponized to shatter lives. Refusing to remain silent, former captive turned activist Iryna Dovhan journeys through newly de-occupied territories to document the harrowing accounts of fellow survivors. Directed by a wartime survivor herself, this powerful documentary weaves a portrait of collective trauma, capturing not just a record of war crimes, but a fierce, unified crusade of women transforming deep personal pain into transformative justice. Asian Premiere.</p><p>&nbsp;</p><p>Panorama Audience Award, Berlin International Film Festival<br>CPH:DOX<br>Sydney Film Festival<br>&nbsp;</p>",
+    "zh_hk": "<p>「花會繼續開，草會一直長。所以，我也可以。」在飽受戰火摧殘的烏克蘭東部，性侵與囚禁成了最齷齪的戰爭武器。曾遭幽禁的倖存者拒絕失聲，毅然走進剛收復的國土，收集並記錄受害女性的血淚證詞。導演同樣曾遭俄軍性暴力對待，以紀錄片揭示戰爭暴行留下的身心烙印，打破社會長久以來的禁忌與沉默，將痛苦轉化為力量，展現出倖存者的堅韌和勇氣。她們並肩築起療癒的姊妹情誼，將私密的個體創傷化為爭取公義的武器。亞洲首映。</p><p>&nbsp;</p><p>柏林影展 全景單元觀眾票選獎<br>哥本哈根國際紀錄片電影節<br>悉尼電影節</p>"
+  },
+  "category": null,
+  "duration": 85,
+  "releaseDate": "2026-07-30T00:00:00.000Z",
+  "genres": [
+    "Documentary"
+  ],
+  "director": "Alisa Kovalenko, Marysia Nikitiuk",
+  "director_lang": {
+    "en": "Alisa Kovalenko, Marysia Nikitiuk",
+    "zh_hk": "Alisa Kovalenko, Marysia Nikitiuk"
+  },
+  "cast": "",
+  "cast_lang": {
+    "en": "",
+    "zh_hk": ""
+  },
+  "dialect": "Ukrainian",
+  "dialect_lang": {
+    "en": "Ukrainian",
+    "zh_hk": "烏克蘭語"
+  },
+  "subtitle": "English",
+  "subtitle_lang": {
+    "en": "English",
+    "zh_hk": "英文"
+  },
+  "poster": "programNt_d90bd35e-65ff-41c1-8db4-687ade64e574.jpg",
+  "landscapeImages": [],
+  "trailer": "",
+  "website": "",
+  "featured": false,
+  "active": true,
+  "numSchedules": 0,
+  "maxTime": "2026-08-09T09:30:00.000Z",
+  "tags": [],
+  "hkta": true,
+  "createdAt": "2026-07-01T03:28:12.153Z",
+  "updatedAt": "2026-07-03T04:18:10.218Z"
+}

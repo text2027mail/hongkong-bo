@@ -1,0 +1,55 @@
+{
+  "id": 988,
+  "movieId": "",
+  "masterId": "",
+  "extId": "",
+  "slug": "alpha",
+  "title": "Alpha",
+  "title_lang": {
+    "en": "Alpha",
+    "zh_hk": "Alpha"
+  },
+  "synopsis": "<p>Two fierce female agents tackle dangerous missions in a thrilling world of espionage, as they navigate perilous situations, execute daring stunts, and face unexpected turns in this action-packed adventure.</p>",
+  "synopsis_lang": {
+    "en": "<p>Two fierce female agents tackle dangerous missions in a thrilling world of espionage, as they navigate perilous situations, execute daring stunts, and face unexpected turns in this action-packed adventure.</p>",
+    "zh_hk": "<p>兩位驍勇善戰的女特務，在驚心動魄的諜報世界中執行危險任務。她們穿梭於危機四伏的處境，上演大膽特技，並在充滿動作場面的冒險中，迎向意想不到的轉折。</p>"
+  },
+  "category": null,
+  "duration": 141,
+  "releaseDate": "2026-07-03T00:00:00.000Z",
+  "genres": [
+    "Action"
+  ],
+  "director": "Shiv Rawail",
+  "director_lang": {
+    "en": "Shiv Rawail",
+    "zh_hk": "Shiv Rawail"
+  },
+  "cast": "Alia Bhatt, Sharvari, Bobby Deol, Anil Kapoor",
+  "cast_lang": {
+    "en": "Alia Bhatt, Sharvari, Bobby Deol, Anil Kapoor",
+    "zh_hk": "Alia Bhatt, Sharvari, Bobby Deol, Anil Kapoor"
+  },
+  "dialect": "Hindi",
+  "dialect_lang": {
+    "en": "Hindi",
+    "zh_hk": "印地語"
+  },
+  "subtitle": "English",
+  "subtitle_lang": {
+    "en": "English",
+    "zh_hk": "英文"
+  },
+  "poster": "programat_91e68c38-e0ba-46d2-b436-446d38907452.jpg",
+  "landscapeImages": [],
+  "trailer": "",
+  "website": "",
+  "featured": false,
+  "active": true,
+  "numSchedules": 0,
+  "maxTime": "2026-07-11T13:35:00.000Z",
+  "tags": [],
+  "hkta": true,
+  "createdAt": "2026-06-23T08:28:14.593Z",
+  "updatedAt": "2026-06-30T11:08:23.290Z"
+}

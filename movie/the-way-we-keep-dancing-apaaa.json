@@ -1,0 +1,53 @@
+{
+  "id": 997,
+  "movieId": "",
+  "masterId": "",
+  "extId": "",
+  "slug": "the-way-we-keep-dancing-apaaa",
+  "title": "The Way We Keep Dancing (APAAA)",
+  "title_lang": {
+    "en": "The Way We Keep Dancing (APAAA)",
+    "zh_hk": "狂舞派3 (APAAA)"
+  },
+  "synopsis": "<p>The Kowloon Industrial District is home to many of Hong Kong’s artists, including rapper Heyo, YouTuber Alan, rising star Hana, and dancer. However, the government is preparing the area for gentrification. The group from ‘The Way We Dance’ were invited to participate in a publicity stunt to transform the district into a ‘Dance Street’. Alan points out that this is an opportunity to garner support from the public. Meanwhile, Heyo’s master Afuc is planning a revolution…</p>",
+  "synopsis_lang": {
+    "en": "<p>The Kowloon Industrial District is home to many of Hong Kong’s artists, including rapper Heyo, YouTuber Alan, rising star Hana, and dancer. However, the government is preparing the area for gentrification. The group from ‘The Way We Dance’ were invited to participate in a publicity stunt to transform the district into a ‘Dance Street’. Alan points out that this is an opportunity to garner support from the public. Meanwhile, Heyo’s master Afuc is planning a revolution…</p>",
+    "zh_hk": "<p>龍城工廈區原本是個工業區，廿年來，開始有不同範籌的創作人因它便宜的租金而進駐。這羣人被稱作 KIDA (Kowloon Industrial District Artists)。近年上映的跳舞電影《狂舞派》及《狂舞派2》，幕前幕後有很多都是 KIDA，包括：嘻哈獨立唱作人Heyo、排舞師奶茶、人氣YouTuber阿良、新晉藝人Hana及她的地下男友舞者Dave。</p><p>&nbsp;</p><p>他們在演藝圈漸露頭角，載浮載沉；他們都以龍城為基地，樂在其中地打拼。可是工廈近年加租急劇，並出現各種頻繁和嚴厲的巡查，背後其實就是地產商作祟，要把龍城轉型成商貿區。一天，他們收到一項工作邀請，要為龍城區注入街舞、音樂、塗鴉等元素的「優化計劃」- 『狂舞。街』。明眼人都知，這是替地產大鱷塗姿抹粉的工程。</p><p>&nbsp;</p><p>正當大家猶豫應否接納這工作，阿良提出，應藉這次機會，令更多人認識、欣賞及支持KIDA，反客為主，為大家爭取合理待遇。同時，Heyo的師父阿弗正密謀一場反對行動...</p>"
+  },
+  "category": null,
+  "duration": 129,
+  "releaseDate": "2026-10-20T00:00:00.000Z",
+  "genres": [],
+  "director": "Adam Wong",
+  "director_lang": {
+    "en": "Adam Wong",
+    "zh_hk": "黃修平"
+  },
+  "cast": "Cherry Ngan, BabyJohn Choi Hon-Yik, Yeung Lok-Man",
+  "cast_lang": {
+    "en": "Cherry Ngan, BabyJohn Choi Hon-Yik, Yeung Lok-Man",
+    "zh_hk": "顏卓靈、蔡瀚億、楊樂文"
+  },
+  "dialect": "Cantonese",
+  "dialect_lang": {
+    "en": "Cantonese",
+    "zh_hk": "粵語"
+  },
+  "subtitle": "Chinese,English",
+  "subtitle_lang": {
+    "en": "Chinese,English",
+    "zh_hk": "中文,英文"
+  },
+  "poster": "programjt_76bb073e-0a75-4e07-83ad-2eca1238c040.jpg",
+  "landscapeImages": [],
+  "trailer": "",
+  "website": "",
+  "featured": false,
+  "active": true,
+  "numSchedules": 0,
+  "maxTime": "2026-10-20T11:00:00.000Z",
+  "tags": [],
+  "hkta": true,
+  "createdAt": "2026-06-25T10:41:41.931Z",
+  "updatedAt": "2026-07-06T10:02:12.000Z"
+}

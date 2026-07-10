@@ -1,0 +1,55 @@
+{
+  "id": 646,
+  "movieId": "",
+  "masterId": "",
+  "extId": "",
+  "slug": "punching-the-worldgff-2026",
+  "title": "Punching the World(GFF 2026)",
+  "title_lang": {
+    "en": "Punching the World(GFF 2026)",
+    "zh_hk": "東德怒火青春(GFF 2026)"
+  },
+  "synopsis": "<p>Germany / 2024&nbsp;<br>&nbsp;</p><p>In early-2000s eastern Germany, brothers Philipp (12) and Tobias (9) watch their family slowly break apart while building an unfinished house. Unemployment, silence, and old wounds leave the boys alone in vast fields and clear quarry waters that offer brief freedom. Nature feels endless, but real guidance is scarce. Older youths draw Philipp in with promises of belonging—yet their path carries violence and fear of outsiders. As a refugee shelter is planned nearby, quiet tensions turn sharp. A clear-eyed, tender portrait of youth caught between loss, nature, and the hard search for a place to stand.</p>",
+  "synopsis_lang": {
+    "en": "<p>Germany / 2024&nbsp;<br>&nbsp;</p><p>In early-2000s eastern Germany, brothers Philipp (12) and Tobias (9) watch their family slowly break apart while building an unfinished house. Unemployment, silence, and old wounds leave the boys alone in vast fields and clear quarry waters that offer brief freedom. Nature feels endless, but real guidance is scarce. Older youths draw Philipp in with promises of belonging—yet their path carries violence and fear of outsiders. As a refugee shelter is planned nearby, quiet tensions turn sharp. A clear-eyed, tender portrait of youth caught between loss, nature, and the hard search for a place to stand.</p>",
+    "zh_hk": "<p>德國 / 2024&nbsp;</p><p>&nbsp;</p><p>12 歲的菲利和 7 歲的弟弟托比亞在德國東部小鎮長大，統一後十多年，前東德地區仍毫無起色。當兩兄弟和父母搬進還未裝修好的大屋，爸爸被解僱後，失業、酗酒、頹廢、出軌，成了他的生活日常，一家人的關係就像危樓般搖搖欲墜。菲利和托比亞在困惑中成長，在學校遇上年紀比他們大的小混混，聯群結黨讓他們找到認同和安全感。菲利加入以種族主義為號召的童黨，卻始終在良知與道德間掙扎。電影改編自德國暢銷小說，生動刻畫統一後前東德社會群像，不安與無力感直刺人心。</p>"
+  },
+  "category": "IIB",
+  "duration": 111,
+  "releaseDate": "2026-08-26T00:00:00.000Z",
+  "genres": [
+    "Drama"
+  ],
+  "director": "Constanze Klaue",
+  "director_lang": {
+    "en": "Constanze Klaue",
+    "zh_hk": "康斯坦絲卡勞 "
+  },
+  "cast": "",
+  "cast_lang": {
+    "en": "",
+    "zh_hk": ""
+  },
+  "dialect": "German",
+  "dialect_lang": {
+    "en": "German",
+    "zh_hk": "德語"
+  },
+  "subtitle": "English",
+  "subtitle_lang": {
+    "en": "English",
+    "zh_hk": "英文"
+  },
+  "poster": "programwm_9d76b429-1ebc-4e5e-a0fc-fa4074e7dead.jpg",
+  "landscapeImages": [],
+  "trailer": "",
+  "website": "",
+  "featured": false,
+  "active": true,
+  "numSchedules": 0,
+  "maxTime": "2026-08-26T11:40:00.000Z",
+  "tags": [],
+  "hkta": true,
+  "createdAt": "2026-02-27T10:56:57.653Z",
+  "updatedAt": "2026-03-31T03:06:59.605Z"
+}

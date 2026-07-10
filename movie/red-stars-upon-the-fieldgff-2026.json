@@ -1,0 +1,55 @@
+{
+  "id": 645,
+  "movieId": "",
+  "masterId": "",
+  "extId": "",
+  "slug": "red-stars-upon-the-fieldgff-2026",
+  "title": "Red Stars upon the field(GFF 2026) ",
+  "title_lang": {
+    "en": "Red Stars upon the field(GFF 2026) ",
+    "zh_hk": "骨中自有黑歷史(GFF 2026)"
+  },
+  "synopsis": "<p>Germany / 2024&nbsp;<br>&nbsp;</p><p>In the heart of rural East Germany, a remarkably preserved skeleton surfaces from the moor, sparking fevered village guesses: a Wehrmacht deserter, a farmer who defied collectivization, or the shadowy third man from a long-ago intelligence operation? Laura Laabs’ striking debut transforms this discovery into a quietly gripping historical puzzle, where echoes of the entire twentieth century suddenly flicker into the present. Tine, at first detached, soon finds the weight of buried eras pressing inescapably into her own life. Atmospheric, introspective and subtly unnerving, the film reveals how history never truly stays underground.&nbsp;</p>",
+  "synopsis_lang": {
+    "en": "<p>Germany / 2024&nbsp;<br>&nbsp;</p><p>In the heart of rural East Germany, a remarkably preserved skeleton surfaces from the moor, sparking fevered village guesses: a Wehrmacht deserter, a farmer who defied collectivization, or the shadowy third man from a long-ago intelligence operation? Laura Laabs’ striking debut transforms this discovery into a quietly gripping historical puzzle, where echoes of the entire twentieth century suddenly flicker into the present. Tine, at first detached, soon finds the weight of buried eras pressing inescapably into her own life. Atmospheric, introspective and subtly unnerving, the film reveals how history never truly stays underground.&nbsp;</p>",
+    "zh_hk": "<p>德國 / 2024</p><p><br>如果歷史可以穿越，回到過去是否就能改寫未來？曾拍攝多部短片及在電視台工作的導演蘿拉拉普斯執導首部長片，將不同形式及風格的影像巧妙融合，疑幻疑真的電視片段配上德國哲學家本雅明的金句，大膽破格，挑戰我們對歷史的認知。藝術家天妮希望用行動為社會帶來改變，當她為逃避警察追查而回到家鄉小鎮，赫然發現鎮上驚現人的骸骨。究竟骸骨是屬於納粹時代的亡魂，還是另有內情？骸骨和鎮上的居民又有何關係？當天妮拿起攝錄機拍攝短片時，才發現案中有案，謎團有如陰霾般縈繞不散，帶領觀眾走進一段不可告人的德國黑歷史。</p>"
+  },
+  "category": "IIB",
+  "duration": 139,
+  "releaseDate": "2026-07-29T00:00:00.000Z",
+  "genres": [
+    "Drama"
+  ],
+  "director": "Laura Laabs",
+  "director_lang": {
+    "en": "Laura Laabs",
+    "zh_hk": "蘿拉拉普斯"
+  },
+  "cast": "",
+  "cast_lang": {
+    "en": "",
+    "zh_hk": ""
+  },
+  "dialect": "German",
+  "dialect_lang": {
+    "en": "German",
+    "zh_hk": "德語"
+  },
+  "subtitle": "English",
+  "subtitle_lang": {
+    "en": "English",
+    "zh_hk": "英文"
+  },
+  "poster": "programvm_510a6c30-9b24-4ac9-b4aa-5f6a48ddaa0a.jpg",
+  "landscapeImages": [],
+  "trailer": "",
+  "website": "",
+  "featured": false,
+  "active": true,
+  "numSchedules": 0,
+  "maxTime": "2026-07-29T11:20:00.000Z",
+  "tags": [],
+  "hkta": true,
+  "createdAt": "2026-02-27T10:56:20.157Z",
+  "updatedAt": "2026-03-31T03:06:23.956Z"
+}
