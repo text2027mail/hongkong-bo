@@ -4,19 +4,22 @@ Hong Kong Box Office & Movie Database Tracker (with Gross Revenue)
 
 - Fetches all show data from cinema.com.hk (multiple dates)
 - Stores daily files: Hongkong Data/{year}/{month}-{day}.json (minified)
-  Each show entry: [perfIx, siteId, time, totalSeats, sold, price]
-- Builds/updates a movie database:
-  - movie/{slug}.json  -> full movie metadata (Recommended Schema)
+  Entry: [perfIx, siteId, time, totalSeats, sold, price]
+- Builds/updates a movie database (minified where possible):
+  - movie/{slug}.json  -> full movie metadata (Recommended Schema, minified)
   - movie/data/{slug}.json -> daily stats: [date, tickets, shows, seats, venues, gross]
-  - movie/index.json -> minified index: name, slug, totalTickets, totalShows, totalSeats, totalGross, firstDate, lastDate, currentDate, d
+  - movie/index.json -> minified index: name, slug, totalTickets, totalShows,
+                         totalSeats, totalGross, firstDate, lastDate, currentDate, d
 
 All dates are in Hong Kong Time (UTC+8). last_updated is in IST (UTC+5:30).
+Retries on network errors. Handles legacy daily files (no price) gracefully.
 """
 
 import requests
 import json
 import os
 import re
+import time
 from datetime import datetime, timedelta, timezone
 from collections import defaultdict
 from typing import Dict, List, Any, Optional, Tuple
@@ -24,6 +27,8 @@ import pytz
 
 # ========== CONFIGURATION ==========
 URL = "https://www.cinema.com.hk/en/movie/ticketing"
+MAX_RETRIES = 3
+RETRY_DELAY = 2  # seconds
 
 HEADERS = {
     "authority": "www.cinema.com.hk",
@@ -77,11 +82,21 @@ def parse_lang_field(field: Any) -> dict:
             return {}
     return field if isinstance(field, dict) else {}
 
-# ========== FETCH & PARSE ==========
-def fetch_html() -> str:
-    r = requests.get(URL, headers=HEADERS)
-    return r.text
+def fetch_html_with_retry() -> str:
+    """Fetch HTML with exponential backoff retries."""
+    for attempt in range(1, MAX_RETRIES + 1):
+        try:
+            r = requests.get(URL, headers=HEADERS, timeout=30)
+            r.raise_for_status()
+            return r.text
+        except Exception as e:
+            print(f"⚠️ Fetch attempt {attempt}/{MAX_RETRIES} failed: {e}")
+            if attempt < MAX_RETRIES:
+                time.sleep(RETRY_DELAY * attempt)
+            else:
+                raise
 
+# ========== FETCH & PARSE ==========
 def extract_all_flight_strings(html: str) -> List[str]:
     results = []
     pattern = 'self.__next_f.push([1,'
@@ -242,7 +257,7 @@ def fetch_and_parse() -> Tuple[Dict[str, Dict[str, List[Tuple[int, int, str, int
       - shows_by_date_movie: dict date (YYYY-MM-DD) -> dict movie_name -> list of (perfIx, siteId, time, total, sold, price)
       - movie_lookup: dict movie_id -> full movie object
     """
-    html = fetch_html()
+    html = fetch_html_with_retry()
     print(f"HTML length: {len(html)}")
     all_strings = extract_all_flight_strings(html)
     print(f"Found {len(all_strings)} flight strings.")
@@ -300,14 +315,27 @@ def get_daily_filepath(date_str: str) -> str:
     return os.path.join(dir_path, f"{month_day}.json")
 
 def load_existing_data(filepath: str) -> Dict[str, List[List[Any]]]:
+    """Load existing daily data. Converts legacy entries (length 5 -> 6 with price=0)."""
     if not os.path.exists(filepath):
         return {}
     try:
         with open(filepath, "r", encoding="utf-8") as f:
             content = json.load(f)
         if isinstance(content, dict) and "data" in content:
-            return content["data"]
-        return content
+            data = content["data"]
+        else:
+            data = content
+        # Ensure all entries have 6 elements (pad price=0 if missing)
+        for movie, entries in data.items():
+            fixed = []
+            for e in entries:
+                if len(e) == 5:
+                    # old format: [perfIx, siteId, time, total, sold]
+                    fixed.append(e + [0])  # add price=0
+                else:
+                    fixed.append(e)
+            data[movie] = fixed
+        return data
     except:
         return {}
 
@@ -336,7 +364,7 @@ def merge_and_save_daily(filepath: str, new_data: Dict[str, List[Tuple[int, int,
 def update_movie_database(movie_lookup: Dict[int, dict]):
     """
     Scan all daily files, aggregate per movie per date,
-    write full metadata per movie, daily stats (with gross), and minified index.
+    write full metadata (minified), daily stats (minified), and minified index.
     """
     print("\n📊 Building/updating movie database...")
     base_dir = "Hongkong Data"
@@ -403,7 +431,7 @@ def update_movie_database(movie_lookup: Dict[int, dict]):
     for movie, dates in movie_agg.items():
         slug = slugify(movie)
 
-        # --- Write full metadata (movie/{slug}.json) ---
+        # --- Write full metadata (movie/{slug}.json) - minified ---
         movie_id = None
         for mid, mobj in movie_lookup.items():
             if mobj.get("name") == movie:
@@ -449,10 +477,10 @@ def update_movie_database(movie_lookup: Dict[int, dict]):
             }
             meta_file = os.path.join("movie", f"{slug}.json")
             with open(meta_file, "w", encoding="utf-8") as f:
-                json.dump(enriched, f, indent=2, ensure_ascii=False)
-            print(f"   📄 {meta_file}")
+                json.dump(enriched, f, separators=(',', ':'), ensure_ascii=False)
+            print(f"   📄 {meta_file} (minified)")
 
-        # --- Write daily stats (movie/data/{slug}.json) ---
+        # --- Write daily stats (movie/data/{slug}.json) - minified ---
         day_rows = []
         total_tickets = 0
         total_shows = 0
@@ -478,13 +506,12 @@ def update_movie_database(movie_lookup: Dict[int, dict]):
             total_seats += seats
             total_gross += gross
 
-            # [date, tickets, shows, seats, venues, gross]
             day_rows.append([date_int, sold, shows, seats, venues, gross])
 
         stats_file = os.path.join("movie/data", f"{slug}.json")
         with open(stats_file, "w", encoding="utf-8") as f:
             json.dump(day_rows, f, separators=(',', ':'), ensure_ascii=False)
-        print(f"   📄 {stats_file}")
+        print(f"   📄 {stats_file} (minified)")
 
         # --- Index entry ---
         if first_date is not None and last_date is not None:
@@ -531,6 +558,7 @@ def main():
 
     # Save daily files for each date found
     for date_str, movie_data in shows_by_date_movie.items():
+        print(f"\n📆 Processing date: {date_str}")
         filepath = get_daily_filepath(date_str)
         merge_and_save_daily(filepath, movie_data)
 
