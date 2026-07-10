@@ -1,10 +1,15 @@
 #!/usr/bin/env python3
 """
-Hong Kong Box Office Tracker
-- Fetches movie show data from cinema.com.hk
-- Stores daily files in: Hongkong Data/{year}/{month}-{day}.json (minified)
-- Builds a movie database: movie/data/{slug}.json (per‑day stats) and movie/index.json
-All times are in Hong Kong Time (UTC+8). last_updated is in IST.
+Hong Kong Box Office & Movie Database Tracker
+
+- Fetches all show data from cinema.com.hk (multiple dates)
+- Stores daily files: Hongkong Data/{year}/{month}-{day}.json (minified)
+- Builds/updates a movie database:
+  - movie/{slug}.json  -> full movie metadata (Recommended Schema)
+  - movie/data/{slug}.json -> daily stats per movie
+  - movie/index.json -> minified index with lifetime totals and date range
+
+All dates are in Hong Kong Time (UTC+8). last_updated is in IST (UTC+5:30).
 """
 
 import requests
@@ -37,47 +42,43 @@ HEADERS = {
     "user-agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 18_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.5 Mobile/15E148 Safari/604.1"
 }
 
-# Timezones
-HK_TZ = timezone(timedelta(hours=8))       # Hong Kong Time for dates
-IST = pytz.timezone("Asia/Kolkata")        # Indian Standard Time for last_updated
+HK_TZ = timezone(timedelta(hours=8))       # Hong Kong Time
+IST = pytz.timezone("Asia/Kolkata")        # Indian Standard Time
 
 # ========== HELPERS ==========
 def hk_now() -> datetime:
-    """Current time in Hong Kong (UTC+8)."""
     return datetime.now(HK_TZ)
 
 def get_hk_date_str() -> str:
-    """Return current date in Hong Kong as YYYY-MM-DD."""
     return hk_now().strftime("%Y-%m-%d")
 
 def get_hk_yyyymmdd() -> str:
-    """Return current date as YYYYMMDD."""
     return hk_now().strftime("%Y%m%d")
 
-def get_hk_year_month_day() -> Tuple[str, str, str]:
-    """Return (year, month, day) of current HK date."""
-    now = hk_now()
-    return now.strftime("%Y"), now.strftime("%m"), now.strftime("%d")
-
 def ist_timestamp() -> str:
-    """Return current IST time as 'YYYY-MM-DD HH:MM IST'."""
     return datetime.now(IST).strftime("%Y-%m-%d %H:%M IST")
 
 def slugify(title: str) -> str:
-    """Generate URL‑friendly slug from movie title."""
     slug = re.sub(r'[^a-zA-Z0-9\s]', '', title).strip().lower()
     slug = re.sub(r'\s+', '-', slug)
     return slug
 
 def date_to_datetime(date_int: int) -> datetime:
-    """Convert YYYYMMDD integer to datetime (naive, but used for day counting)."""
     return datetime.strptime(str(date_int), "%Y%m%d")
 
 def days_between_inclusive(first: int, last: int) -> int:
-    """Return number of days from first to last inclusive."""
     d1 = date_to_datetime(first)
     d2 = date_to_datetime(last)
     return (d2 - d1).days + 1
+
+def parse_lang_field(field: Any) -> dict:
+    """Parse a language field (either string JSON or dict)."""
+    if isinstance(field, str):
+        try:
+            return json.loads(field)
+        except:
+            return {}
+    return field if isinstance(field, dict) else {}
 
 # ========== FETCH & PARSE ==========
 def fetch_html() -> str:
@@ -85,7 +86,6 @@ def fetch_html() -> str:
     return r.text
 
 def extract_all_flight_strings(html: str) -> List[str]:
-    """Extract all self.__next_f.push([1, "...") strings."""
     results = []
     pattern = 'self.__next_f.push([1,'
     start_pos = 0
@@ -117,7 +117,6 @@ def extract_all_flight_strings(html: str) -> List[str]:
     return results
 
 def parse_payloads(payload_strings: List[str]) -> Dict[str, Any]:
-    """Parse flight chunks into a dictionary keyed by chunk ID."""
     chunks = {}
     for payload in payload_strings:
         lines = payload.split('\n')
@@ -138,7 +137,6 @@ def parse_payloads(payload_strings: List[str]) -> Dict[str, Any]:
     return chunks
 
 def resolve_reference(ref: str, chunks: Dict[str, Any], root_data: Any = None) -> Any:
-    """Resolve a reference string like $5:1:props:... using chunks."""
     if not isinstance(ref, str) or not ref.startswith('$'):
         return ref
     path = ref[1:]
@@ -166,7 +164,6 @@ def resolve_reference(ref: str, chunks: Dict[str, Any], root_data: Any = None) -
     return data
 
 def find_key(data: Any, target_key: str) -> Any:
-    """Recursively find first occurrence of target_key in data."""
     if isinstance(data, dict):
         if target_key in data:
             return data[target_key]
@@ -182,7 +179,6 @@ def find_key(data: Any, target_key: str) -> Any:
     return None
 
 def build_movie_lookup(chunks: Dict[str, Any]) -> Dict[int, dict]:
-    """Build a lookup: movie_id -> movie object from the 'movies' array."""
     for chunk_id, data in chunks.items():
         movies = find_key(data, 'movies')
         if movies and isinstance(movies, list):
@@ -195,7 +191,6 @@ def build_movie_lookup(chunks: Dict[str, Any]) -> Dict[int, dict]:
     return {}
 
 def build_site_lookup(chunks: Dict[str, Any]) -> Dict[int, str]:
-    """Build a lookup: site_id -> site name from 'showSites' or 'siteGroups'."""
     for chunk_id, data in chunks.items():
         sites = find_key(data, 'showSites')
         if sites and isinstance(sites, list):
@@ -222,48 +217,14 @@ def build_site_lookup(chunks: Dict[str, Any]) -> Dict[int, str]:
     return {}
 
 def get_shows_array(chunks: Dict[str, Any]) -> Optional[List[dict]]:
-    """Find and return the 'shows' array from any chunk."""
     for chunk_id, data in chunks.items():
         shows = find_key(data, 'shows')
         if shows is not None:
             return shows
     return None
 
-def parse_shows(shows_array: List[dict], chunks: Dict[str, Any],
-                movie_lookup: Dict[int, dict], site_lookup: Dict[int, str]) -> List[Tuple[int, int, str, int, int]]:
-    """
-    Parse shows into a list of tuples:
-      (perfIx, siteId, time, total, sold)
-    Time is converted to Hong Kong local time in 'HH:MM:SS' format.
-    """
-    result = []
-    for show in shows_array:
-        try:
-            show_id = show["id"]
-            time_str = show["time"]
-            # Convert UTC to HK time
-            utc_dt = datetime.fromisoformat(time_str.replace('Z', '+00:00'))
-            hk_dt = utc_dt.astimezone(HK_TZ)
-            local_time = hk_dt.strftime('%H:%M:%S')  # 24-hour format with seconds
-            total = show["seats"]
-            sold = show["sold"]
-
-            # Site ID
-            site_obj = show.get("site", {})
-            site_id = site_obj.get("id")
-
-            # Movie ID (for verification, but we only store site & time)
-            # We don't need movie id here because we're grouping by movie name later.
-            # We'll resolve movie name later.
-            result.append((show_id, site_id, local_time, total, sold))
-        except KeyError as e:
-            print(f"Skipping show due to missing key: {e}")
-            continue
-    return result
-
 def get_movie_name_from_show(show: dict, chunks: Dict[str, Any],
                              movie_lookup: Dict[int, dict]) -> str:
-    """Extract the movie name from a show object, handling references."""
     movie_obj = show.get("movie")
     if isinstance(movie_obj, str) and movie_obj.startswith('$'):
         movie_obj = resolve_reference(movie_obj, chunks)
@@ -277,12 +238,12 @@ def get_movie_name_from_show(show: dict, chunks: Dict[str, Any],
         return movie_lookup[movie_id].get("name", f"Movie {movie_id}")
     return f"Movie {movie_id if movie_id is not None else 'unknown'}"
 
-def fetch_and_parse() -> Tuple[Dict[str, List[Tuple[int, int, str, int, int]]], Dict[int, dict]]:
+def fetch_and_parse() -> Tuple[Dict[str, Dict[str, List[Tuple[int, int, str, int, int]]]], Dict[int, dict]]:
     """
-    Fetch HTML, parse chunks, extract shows and movie lookup.
+    Fetch and parse all shows.
     Returns:
-      - shows_by_movie: dict movie_name -> list of (perfIx, siteId, time, total, sold)
-      - movie_lookup: dict movie_id -> full movie object (for later database building)
+      - shows_by_date_movie: dict date (YYYY-MM-DD) -> dict movie_name -> list of (perfIx, siteId, time, total, sold)
+      - movie_lookup: dict movie_id -> full movie object
     """
     html = fetch_html()
     print(f"HTML length: {len(html)}")
@@ -305,37 +266,45 @@ def fetch_and_parse() -> Tuple[Dict[str, List[Tuple[int, int, str, int, int]]], 
 
     print(f"Found shows array with {len(shows_array)} entries.")
 
-    # Group by movie name
-    shows_by_movie = defaultdict(list)
+    # Group by date, then by movie
+    shows_by_date_movie = defaultdict(lambda: defaultdict(list))
+
     for show in shows_array:
-        movie_name = get_movie_name_from_show(show, chunks, movie_lookup)
-        # Parse show data
         try:
-            show_id = show["id"]
+            # Resolve movie name
+            movie_name = get_movie_name_from_show(show, chunks, movie_lookup)
+
+            # Get HK local date and time
             time_str = show["time"]
             utc_dt = datetime.fromisoformat(time_str.replace('Z', '+00:00'))
             hk_dt = utc_dt.astimezone(HK_TZ)
+            local_date = hk_dt.strftime('%Y-%m-%d')
             local_time = hk_dt.strftime('%H:%M:%S')
+
+            show_id = show["id"]
             total = show["seats"]
             sold = show["sold"]
             site_obj = show.get("site", {})
             site_id = site_obj.get("id")
-            shows_by_movie[movie_name].append((show_id, site_id, local_time, total, sold))
+
+            shows_by_date_movie[local_date][movie_name].append(
+                (show_id, site_id, local_time, total, sold)
+            )
         except KeyError as e:
             print(f"Skipping show due to missing key: {e}")
             continue
 
-    return dict(shows_by_movie), movie_lookup
+    return dict(shows_by_date_movie), movie_lookup
 
 # ========== DAILY FILE I/O ==========
-def get_daily_filepath() -> str:
-    year, month, day = get_hk_year_month_day()
+def get_daily_filepath(date_str: str) -> str:
+    """date_str: YYYY-MM-DD"""
+    year, month_day = date_str.split('-')[0], date_str[5:]
     dir_path = os.path.join("Hongkong Data", year)
     os.makedirs(dir_path, exist_ok=True)
-    return os.path.join(dir_path, f"{month}-{day}.json")
+    return os.path.join(dir_path, f"{month_day}.json")
 
 def load_existing_data(filepath: str) -> Dict[str, List[List[Any]]]:
-    """Load the data portion from a daily JSON file."""
     if not os.path.exists(filepath):
         return {}
     try:
@@ -347,18 +316,12 @@ def load_existing_data(filepath: str) -> Dict[str, List[List[Any]]]:
     except:
         return {}
 
-def merge_and_save(filepath: str, new_data: Dict[str, List[Tuple[int, int, str, int, int]]]):
-    """
-    Merge new_data into existing file (update by perfIx),
-    then save with top-level "data" and "last_updated" (IST).
-    Each entry is stored as [perfIx, siteId, time, total, sold].
-    """
+def merge_and_save_daily(filepath: str, new_data: Dict[str, List[Tuple[int, int, str, int, int]]]):
     existing = load_existing_data(filepath)
 
     for movie, entries in new_data.items():
         if movie not in existing:
             existing[movie] = []
-        # Build map: perfIx -> entry
         existing_map = {entry[0]: entry for entry in existing[movie]}
         for entry in entries:
             pid = entry[0]
@@ -377,15 +340,10 @@ def merge_and_save(filepath: str, new_data: Dict[str, List[Tuple[int, int, str, 
 # ========== MOVIE DATABASE BUILDER ==========
 def update_movie_database(movie_lookup: Dict[int, dict]):
     """
-    Scan all daily JSON files under Hongkong Data/, aggregate per movie per date,
-    and write per‑movie summary files + an index.
-    New format:
-      - index: per movie => name, slug, totalTickets, totalShows, totalSeats,
-                firstDate, lastDate, currentDate, and d (days inclusive between first and last)
-      - per-movie: each day => [date (YYYYMMDD), tickets, shows, seats, venueCount]
-    All gross fields are removed.
+    Scan all daily files, aggregate per movie per date,
+    write full metadata per movie, daily stats, and minified index.
     """
-    print("\n📊 Building movie database...")
+    print("\n📊 Building/updating movie database...")
     base_dir = "Hongkong Data"
     if not os.path.exists(base_dir):
         print("⚠️ No Hongkong Data found.")
@@ -407,7 +365,7 @@ def update_movie_database(movie_lookup: Dict[int, dict]):
         print("⚠️ No daily files found.")
         return
 
-    # Aggregate: movie -> date -> stats
+    # Aggregate per movie per date
     movie_agg: Dict[str, Dict[str, Dict[str, Any]]] = defaultdict(lambda: defaultdict(lambda: {
         "shows": 0,
         "seats": 0,
@@ -427,9 +385,9 @@ def update_movie_database(movie_lookup: Dict[int, dict]):
             continue
         for movie, entries in data.items():
             shows = len(entries)
-            seats = sum(e[3] for e in entries)   # total seats
-            sold = sum(e[4] for e in entries)   # sold
-            venues = {e[1] for e in entries}    # siteId
+            seats = sum(e[3] for e in entries)
+            sold = sum(e[4] for e in entries)
+            venues = {e[1] for e in entries}
 
             agg = movie_agg[movie][date_str]
             agg["shows"] += shows
@@ -437,14 +395,69 @@ def update_movie_database(movie_lookup: Dict[int, dict]):
             agg["sold"] += sold
             agg["venues"].update(venues)
 
-    # Today's date in YYYYMMDD
     today_yyyymmdd = int(get_hk_yyyymmdd())
 
+    # Prepare directories
+    os.makedirs("movie", exist_ok=True)
     os.makedirs("movie/data", exist_ok=True)
+
     index = []
 
     for movie, dates in movie_agg.items():
         slug = slugify(movie)
+
+        # --- Write full metadata (movie/{slug}.json) ---
+        # Find the movie id from the lookup (we need to match by name)
+        movie_id = None
+        for mid, mobj in movie_lookup.items():
+            if mobj.get("name") == movie:
+                movie_id = mid
+                break
+
+        if movie_id is not None:
+            movie_obj = movie_lookup[movie_id]
+            # Build enriched object
+            enriched = {
+                "id": movie_obj.get("id"),
+                "movieId": movie_obj.get("filmId"),
+                "masterId": movie_obj.get("masterId"),
+                "extId": movie_obj.get("extId"),
+                "slug": slug,
+                "title": movie_obj.get("name"),
+                "title_lang": parse_lang_field(movie_obj.get("name_lang")),
+                "synopsis": movie_obj.get("description"),
+                "synopsis_lang": parse_lang_field(movie_obj.get("description_lang")),
+                "category": movie_obj.get("category"),
+                "duration": movie_obj.get("duration"),
+                "releaseDate": movie_obj.get("openingDate"),
+                "genres": [g.get("name") for g in movie_obj.get("movieTypes", []) if isinstance(g, dict)],
+                "director": movie_obj.get("director"),
+                "director_lang": parse_lang_field(movie_obj.get("director_lang")),
+                "cast": movie_obj.get("cast"),
+                "cast_lang": parse_lang_field(movie_obj.get("cast_lang")),
+                "dialect": movie_obj.get("dialect"),
+                "dialect_lang": parse_lang_field(movie_obj.get("dialect_lang")),
+                "subtitle": movie_obj.get("subtitle"),
+                "subtitle_lang": parse_lang_field(movie_obj.get("subtitle_lang")),
+                "poster": movie_obj.get("images", [""])[0] if movie_obj.get("images") else "",
+                "landscapeImages": movie_obj.get("landscapeImages", []),
+                "trailer": movie_obj.get("trailer"),
+                "website": movie_obj.get("website"),
+                "featured": movie_obj.get("featured"),
+                "active": movie_obj.get("active"),
+                "numSchedules": movie_obj.get("numSchedules", 0),
+                "maxTime": movie_obj.get("maxTime"),
+                "tags": movie_obj.get("tags", []),
+                "hkta": movie_obj.get("hkta"),
+                "createdAt": movie_obj.get("createTime"),
+                "updatedAt": movie_obj.get("updateTime")
+            }
+            meta_file = os.path.join("movie", f"{slug}.json")
+            with open(meta_file, "w", encoding="utf-8") as f:
+                json.dump(enriched, f, indent=2, ensure_ascii=False)
+            print(f"   📄 {meta_file}")
+
+        # --- Write daily stats (movie/data/{slug}.json) ---
         day_rows = []
         total_tickets = 0
         total_shows = 0
@@ -467,22 +480,19 @@ def update_movie_database(movie_lookup: Dict[int, dict]):
             total_shows += shows
             total_seats += seats
 
-            # Per-day entry: [date, tickets, shows, seats, venueCount]
             day_rows.append([date_int, sold, shows, seats, venues])
 
-        # Write per‑movie file
-        movie_file = os.path.join("movie/data", f"{slug}.json")
-        with open(movie_file, "w", encoding="utf-8") as f:
+        stats_file = os.path.join("movie/data", f"{slug}.json")
+        with open(stats_file, "w", encoding="utf-8") as f:
             json.dump(day_rows, f, separators=(',', ':'), ensure_ascii=False)
-        print(f"   📄 {movie_file}")
+        print(f"   📄 {stats_file}")
 
-        # Compute d = days between first and last (inclusive)
+        # --- Index entry ---
         if first_date is not None and last_date is not None:
             d = days_between_inclusive(first_date, last_date)
         else:
             d = 0
 
-        # Build index entry
         index.append({
             "name": movie,
             "slug": slug,
@@ -495,7 +505,7 @@ def update_movie_database(movie_lookup: Dict[int, dict]):
             "d": d
         })
 
-    # Write index file with last_updated
+    # Write minified index
     index_file = os.path.join("movie", "index.json")
     output_index = {
         "movies": index,
@@ -508,21 +518,23 @@ def update_movie_database(movie_lookup: Dict[int, dict]):
 
 # ========== MAIN ==========
 def main():
-    print(f"📅 Processing date: {get_hk_date_str()} (Hong Kong Time)")
+    print(f"📅 Processing all dates (based on shows found)")
     try:
-        shows_by_movie, movie_lookup = fetch_and_parse()
+        shows_by_date_movie, movie_lookup = fetch_and_parse()
     except Exception as e:
         print(f"❌ Error fetching data: {e}")
         return
 
-    if not shows_by_movie:
+    if not shows_by_date_movie:
         print("⚠️ No data fetched.")
         return
 
-    filepath = get_daily_filepath()
-    merge_and_save(filepath, shows_by_movie)
+    # Save daily files for each date found
+    for date_str, movie_data in shows_by_date_movie.items():
+        filepath = get_daily_filepath(date_str)
+        merge_and_save_daily(filepath, movie_data)
 
-    # Build movie database
+    # Update movie database
     update_movie_database(movie_lookup)
 
 if __name__ == "__main__":
