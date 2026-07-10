@@ -1,7 +1,6 @@
 import requests
 import json
 import os
-import re
 from datetime import datetime
 from zoneinfo import ZoneInfo
 from collections import defaultdict
@@ -39,7 +38,7 @@ def fetch_page():
 def extract_all_flight_strings(html):
     """
     Find all self.__next_f.push([1, " ... ") calls and extract the raw string content.
-    Returns a list of (chunk_id, decoded_string) tuples.
+    Returns a list of decoded strings.
     """
     results = []
     pattern = 'self.__next_f.push([1,'
@@ -67,12 +66,9 @@ def extract_all_flight_strings(html):
         raw = html[quote_start+1:end]
         try:
             decoded = json.loads('"' + raw + '"')
-            # Try to extract the chunk ID from the push call
-            # The call is self.__next_f.push([1, "..."), so the first argument is 1
-            # but we don't really need it; we'll just store the decoded string.
             results.append(decoded)
         except json.JSONDecodeError:
-            # If decoding fails, skip
+            # skip if it can't be decoded as a JSON string
             pass
         start_pos = end + 1
     return results
@@ -110,12 +106,10 @@ def resolve_reference(ref, chunks, root_data=None):
     """
     if not isinstance(ref, str) or not ref.startswith('$'):
         return ref
-    # Remove the leading '$'
     path = ref[1:]
     parts = path.split(':')
     if not parts:
         return ref
-    # First part is chunk ID
     chunk_id = parts[0]
     if chunk_id in chunks:
         data = chunks[chunk_id]
@@ -123,7 +117,6 @@ def resolve_reference(ref, chunks, root_data=None):
         data = root_data
     else:
         return ref
-    # Now traverse the rest of the path
     for key in parts[1:]:
         if isinstance(data, dict) and key in data:
             data = data[key]
@@ -138,27 +131,42 @@ def resolve_reference(ref, chunks, root_data=None):
     return data
 
 
-def find_shows(data):
+def find_key(data, target_key):
     """
-    Recursively search for a key "shows" in the parsed data.
-    Returns the shows array (list) if found, else None.
+    Recursively search for a key in the data and return its value (first found).
     """
     if isinstance(data, dict):
-        if "shows" in data:
-            return data["shows"]
+        if target_key in data:
+            return data[target_key]
         for v in data.values():
-            res = find_shows(v)
+            res = find_key(v, target_key)
             if res is not None:
                 return res
     elif isinstance(data, list):
         for item in data:
-            res = find_shows(item)
+            res = find_key(item, target_key)
             if res is not None:
                 return res
     return None
 
 
-def parse_shows_from_array(shows_array, chunks):
+def build_movie_lookup(chunks):
+    """
+    Find the 'movies' list (a list of full movie objects) in any chunk and build a dict: movie_id -> movie object.
+    """
+    for chunk_id, data in chunks.items():
+        movies = find_key(data, 'movies')
+        if movies and isinstance(movies, list):
+            lookup = {}
+            for movie in movies:
+                if isinstance(movie, dict) and 'id' in movie:
+                    lookup[movie['id']] = movie
+            if lookup:
+                return lookup
+    return {}
+
+
+def parse_shows_from_array(shows_array, chunks, movie_lookup):
     shows = []
     for show in shows_array:
         try:
@@ -169,20 +177,23 @@ def parse_shows_from_array(shows_array, chunks):
             seats = show["seats"]
             sold = show["sold"]
             movie_obj = show.get("movie")
-            # If movie is a reference string, resolve it
+            # Resolve reference if needed
             if isinstance(movie_obj, str) and movie_obj.startswith('$'):
                 movie_obj = resolve_reference(movie_obj, chunks)
             # Now movie_obj should be a dict
             if not isinstance(movie_obj, dict):
                 print(f"Warning: movie_obj is not a dict for show {show_id}: {movie_obj}")
                 continue
+            # Try to get the name
             movie_name = movie_obj.get("name")
+            # If name is missing, try to look up by id
             if not movie_name:
-                # Try to get name from a 'name_lang' or similar
-                # Fallback: use ID or skip
-                print(f"Warning: movie name missing for show {show_id}, movie_obj keys: {movie_obj.keys()}")
-                # You could skip, but we'll use a placeholder
-                movie_name = f"Movie {movie_obj.get('id', 'unknown')}"
+                movie_id = movie_obj.get("id")
+                if movie_id is not None and movie_id in movie_lookup:
+                    full_movie = movie_lookup[movie_id]
+                    movie_name = full_movie.get("name", f"Movie {movie_id}")
+                else:
+                    movie_name = f"Movie {movie_id if movie_id is not None else 'unknown'}"
             venue = show.get("site", {}).get("name", "Cinema.com.hk")
             shows.append({
                 "perfIx": show_id,
@@ -329,10 +340,14 @@ def main():
     chunks = parse_payloads(all_strings)
     print(f"Parsed {len(chunks)} chunks.")
 
+    # Build movie lookup from the movies list
+    movie_lookup = build_movie_lookup(chunks)
+    print(f"Found {len(movie_lookup)} unique movies.")
+
     # Find the shows array in any chunk
     shows_array = None
     for chunk_id, data in chunks.items():
-        shows = find_shows(data)
+        shows = find_key(data, 'shows')
         if shows is not None:
             shows_array = shows
             break
@@ -342,7 +357,7 @@ def main():
         return
 
     print(f"Found shows array with {len(shows_array)} entries.")
-    shows = parse_shows_from_array(shows_array, chunks)
+    shows = parse_shows_from_array(shows_array, chunks, movie_lookup)
     print("Shows scraped:", len(shows))
 
     if shows:
