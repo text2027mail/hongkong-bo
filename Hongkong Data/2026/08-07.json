@@ -1,0 +1,44 @@
+[
+  {
+    "perfIx": 121074,
+    "movie": "My Word Against Mine (EADF2026) ",
+    "venue": "PREMIERE ELEMENTS",
+    "date": "2026-08-07",
+    "time": "7:30 PM",
+    "total": 127,
+    "available": 112,
+    "blocked": 0,
+    "sold": 15,
+    "gross": 1425,
+    "price": 95,
+    "last_updated": "2026-07-10 12:21:58 PM IST"
+  },
+  {
+    "perfIx": 121005,
+    "movie": "Bestiari, Erbari, Lapidari (EADF2026) ",
+    "venue": "CINEMATHEQUE",
+    "date": "2026-08-07",
+    "time": "8:00 PM",
+    "total": 119,
+    "available": 110,
+    "blocked": 0,
+    "sold": 9,
+    "gross": 1305,
+    "price": 145,
+    "last_updated": "2026-07-10 12:21:58 PM IST"
+  },
+  {
+    "perfIx": 123886,
+    "movie": "ATEEZ : LIGHT THE WAY IN CINEMAS (2026)  ",
+    "venue": "PREMIERE ELEMENTS",
+    "date": "2026-08-07",
+    "time": "9:40 PM",
+    "total": 127,
+    "available": 62,
+    "blocked": 0,
+    "sold": 65,
+    "gross": 5850,
+    "price": 90,
+    "last_updated": "2026-07-10 12:21:58 PM IST"
+  }
+]

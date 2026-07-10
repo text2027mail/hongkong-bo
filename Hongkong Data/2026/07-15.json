@@ -1,0 +1,58 @@
+[
+  {
+    "perfIx": 113250,
+    "movie": "Dead Man",
+    "venue": "CINEMATHEQUE",
+    "date": "2026-07-15",
+    "time": "3:00 PM",
+    "total": 119,
+    "available": 101,
+    "blocked": 0,
+    "sold": 18,
+    "gross": 1710,
+    "price": 95,
+    "last_updated": "2026-07-10 12:21:58 PM IST"
+  },
+  {
+    "perfIx": 116948,
+    "movie": "Night on Earth",
+    "venue": "CINEMATHEQUE",
+    "date": "2026-07-15",
+    "time": "5:15 PM",
+    "total": 119,
+    "available": 96,
+    "blocked": 0,
+    "sold": 23,
+    "gross": 2185,
+    "price": 95,
+    "last_updated": "2026-07-10 12:21:58 PM IST"
+  },
+  {
+    "perfIx": 118287,
+    "movie": "Galaxy Writer (bcSunday)",
+    "venue": "PREMIERE ELEMENTS",
+    "date": "2026-07-15",
+    "time": "7:30 PM",
+    "total": 127,
+    "available": 126,
+    "blocked": 0,
+    "sold": 1,
+    "gross": 95,
+    "price": 95,
+    "last_updated": "2026-07-10 12:21:58 PM IST"
+  },
+  {
+    "perfIx": 114190,
+    "movie": "Inter Alia (NT Live 2026-27) ",
+    "venue": "PALACE ifc",
+    "date": "2026-07-15",
+    "time": "7:35 PM",
+    "total": 88,
+    "available": 75,
+    "blocked": 0,
+    "sold": 13,
+    "gross": 2990,
+    "price": 230,
+    "last_updated": "2026-07-10 12:21:58 PM IST"
+  }
+]

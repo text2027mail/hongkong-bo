@@ -1,0 +1,30 @@
+[
+  {
+    "perfIx": 24702,
+    "movie": "Tchaikovsky\u2019s Eugene Onegin (The Met 2026)",
+    "venue": "MOViE MOViE Pacific Place (Admiralty)",
+    "date": "2026-09-06",
+    "time": "1:45 PM",
+    "total": 81,
+    "available": 68,
+    "blocked": 0,
+    "sold": 13,
+    "gross": 4550,
+    "price": 350,
+    "last_updated": "2026-07-10 12:21:58 PM IST"
+  },
+  {
+    "perfIx": 124765,
+    "movie": "Let's have a cup of doodh patti chai",
+    "venue": "CINEMATHEQUE",
+    "date": "2026-09-06",
+    "time": "3:30 PM",
+    "total": 119,
+    "available": 113,
+    "blocked": 0,
+    "sold": 6,
+    "gross": 570,
+    "price": 95,
+    "last_updated": "2026-07-10 12:21:58 PM IST"
+  }
+]

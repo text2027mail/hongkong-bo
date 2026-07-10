@@ -1,0 +1,58 @@
+[
+  {
+    "perfIx": 124811,
+    "movie": "Monster",
+    "venue": "CINEMATHEQUE",
+    "date": "2026-07-27",
+    "time": "3:00 PM",
+    "total": 119,
+    "available": 111,
+    "blocked": 0,
+    "sold": 8,
+    "gross": 760,
+    "price": 95,
+    "last_updated": "2026-07-10 12:21:58 PM IST"
+  },
+  {
+    "perfIx": 117332,
+    "movie": "CHARACTER (bcSunday)",
+    "venue": "PALACE ifc",
+    "date": "2026-07-27",
+    "time": "7:00 PM",
+    "total": 88,
+    "available": 78,
+    "blocked": 0,
+    "sold": 10,
+    "gross": 950,
+    "price": 95,
+    "last_updated": "2026-07-10 12:21:58 PM IST"
+  },
+  {
+    "perfIx": 120993,
+    "movie": "Mr. Nobody Against Putin (EADF2026) ",
+    "venue": "CINEMATHEQUE",
+    "date": "2026-07-27",
+    "time": "7:25 PM",
+    "total": 119,
+    "available": 37,
+    "blocked": 0,
+    "sold": 82,
+    "gross": 7790,
+    "price": 95,
+    "last_updated": "2026-07-10 12:21:58 PM IST"
+  },
+  {
+    "perfIx": 120994,
+    "movie": "A Fox Under a Pink Moon (EADF2026) ",
+    "venue": "CINEMATHEQUE",
+    "date": "2026-07-27",
+    "time": "9:50 PM",
+    "total": 119,
+    "available": 108,
+    "blocked": 0,
+    "sold": 11,
+    "gross": 1045,
+    "price": 95,
+    "last_updated": "2026-07-10 12:21:58 PM IST"
+  }
+]
