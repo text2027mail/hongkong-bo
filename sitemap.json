@@ -1,0 +1,80 @@
+{
+  "1": {
+    "state": "Hong Kong",
+    "city": "Hong Kong",
+    "district": "Central & Western",
+    "chain": "MOViE MOViE"
+  },
+  "2": {
+    "state": "Hong Kong",
+    "city": "Hong Kong",
+    "district": "Eastern",
+    "chain": "MOViE MOViE"
+  },
+  "3": {
+    "state": "Hong Kong",
+    "city": "Kowloon",
+    "district": "Yau Tsim Mong",
+    "chain": "GALA CINEMA"
+  },
+  "4": {
+    "state": "Hong Kong",
+    "city": "Hong Kong",
+    "district": "Central & Western",
+    "chain": "PALACE"
+  },
+  "5": {
+    "state": "Hong Kong",
+    "city": "Kowloon",
+    "district": "Yau Tsim Mong",
+    "chain": "B+ cinema"
+  },
+  "6": {
+    "state": "Hong Kong",
+    "city": "Kowloon",
+    "district": "Kwun Tong",
+    "chain": "B+ cinema"
+  },
+  "7": {
+    "state": "Hong Kong",
+    "city": "Kowloon",
+    "district": "Yau Tsim Mong",
+    "chain": "PREMIERE ELEMENTS"
+  },
+  "8": {
+    "state": "Hong Kong",
+    "city": "Hong Kong",
+    "district": "Central & Western",
+    "chain": "CINEMATHEQUE"
+  },
+  "9": {
+    "state": "Hong Kong",
+    "city": "Kowloon",
+    "district": "Yau Tsim Mong",
+    "chain": "MONGKOK"
+  },
+  "10": {
+    "state": "Hong Kong",
+    "city": "New Territories",
+    "district": "Yuen Long",
+    "chain": "MY CINEMA"
+  },
+  "11": {
+    "state": "Hong Kong",
+    "city": "New Territories",
+    "district": "Kwai Tsing",
+    "chain": "KWAI FONG"
+  },
+  "12": {
+    "state": "Hong Kong",
+    "city": "New Territories",
+    "district": "Tsuen Wan",
+    "chain": "TSUEN WAN"
+  },
+  "13": {
+    "state": "Hong Kong",
+    "city": "New Territories",
+    "district": "Yuen Long",
+    "chain": "KINGSWOOD"
+  }
+}
