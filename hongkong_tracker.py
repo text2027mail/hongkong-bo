@@ -146,10 +146,6 @@ def build_movie_lookup(chunks):
 
 
 def build_site_lookup(chunks):
-    """
-    Build a lookup dictionary from site id to site name.
-    We look for 'showSites' which contains site objects with id and name.
-    """
     for chunk_id, data in chunks.items():
         sites = find_key(data, 'showSites')
         if sites and isinstance(sites, list):
@@ -159,7 +155,7 @@ def build_site_lookup(chunks):
                     lookup[site['id']] = site['name']
             if lookup:
                 return lookup
-    # Fallback: try to find siteGroups and extract from items
+    # Fallback to siteGroups
     for chunk_id, data in chunks.items():
         groups = find_key(data, 'siteGroups')
         if groups and isinstance(groups, list):
@@ -181,15 +177,13 @@ def parse_shows_from_array(shows_array, chunks, movie_lookup, site_lookup):
     for show in shows_array:
         try:
             show_id = show["id"]
-            # Date
-            date_str = show["date"]
-            date = date_str[:10]  # YYYY-MM-DD
-            # Time: convert UTC to HK time
+            # Convert UTC time to Hong Kong local time
             time_str = show["time"]
-            # Parse UTC datetime (Z means UTC)
             utc_dt = datetime.fromisoformat(time_str.replace('Z', '+00:00'))
             hk_dt = utc_dt.astimezone(HK_TZ)
-            time_hm = hk_dt.strftime('%H:%M')  # 24-hour format, e.g., "00:00" for midnight
+            date = hk_dt.strftime('%Y-%m-%d')
+            # Use 12-hour clock with AM/PM to match site
+            time_hm = hk_dt.strftime('%I:%M %p').lstrip('0')  # e.g., "12:00 am"
 
             price = show["price"]
             seats = show["seats"]
@@ -360,13 +354,11 @@ def main():
     chunks = parse_payloads(all_strings)
     print(f"Parsed {len(chunks)} chunks.")
 
-    # Build lookups
     movie_lookup = build_movie_lookup(chunks)
     print(f"Found {len(movie_lookup)} unique movies.")
     site_lookup = build_site_lookup(chunks)
     print(f"Found {len(site_lookup)} unique venues.")
 
-    # Find the shows array
     shows_array = None
     for chunk_id, data in chunks.items():
         shows = find_key(data, 'shows')
