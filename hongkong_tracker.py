@@ -5,11 +5,11 @@ Hong Kong Box Office & Movie Database Tracker (with Gross Revenue)
 - Fetches all show data from cinema.com.hk (multiple dates)
 - Stores daily files: Hongkong Data/{year}/{month}-{day}.json (minified)
   Entry: [perfIx, siteId, time, totalSeats, sold, price]
-- Builds/updates a movie database (minified where possible):
-  - movie/{slug}.json  -> full movie metadata (Recommended Schema, minified)
+- Saves site lookup: sites.json (siteId -> {id, code, name, shortName, ...})
+- Builds/updates a movie database (minified):
+  - movie/{slug}.json  -> full movie metadata (minified)
   - movie/data/{slug}.json -> daily stats: [date, tickets, shows, seats, venues, gross]
-  - movie/index.json -> minified index: name, slug, totalTickets, totalShows,
-                         totalSeats, totalGross, firstDate, lastDate, currentDate, d
+  - movie/index.json -> minified index with lifetime totals
 
 All dates are in Hong Kong Time (UTC+8). last_updated is in IST (UTC+5:30).
 Retries on network errors. Handles legacy daily files (no price) gracefully.
@@ -83,7 +83,6 @@ def parse_lang_field(field: Any) -> dict:
     return field if isinstance(field, dict) else {}
 
 def fetch_html_with_retry() -> str:
-    """Fetch HTML with exponential backoff retries."""
     for attempt in range(1, MAX_RETRIES + 1):
         try:
             r = requests.get(URL, headers=HEADERS, timeout=30)
@@ -202,14 +201,17 @@ def build_movie_lookup(chunks: Dict[str, Any]) -> Dict[int, dict]:
                 return lookup
     return {}
 
-def build_site_lookup(chunks: Dict[str, Any]) -> Dict[int, str]:
+def build_site_lookup(chunks: Dict[str, Any]) -> Dict[int, dict]:
+    """
+    Build a lookup: site_id -> full site object (including name, code, etc.)
+    """
     for chunk_id, data in chunks.items():
         sites = find_key(data, 'showSites')
         if sites and isinstance(sites, list):
             lookup = {}
             for site in sites:
-                if isinstance(site, dict) and 'id' in site and 'name' in site:
-                    lookup[site['id']] = site['name']
+                if isinstance(site, dict) and 'id' in site:
+                    lookup[site['id']] = site
             if lookup:
                 return lookup
     # fallback to siteGroups
@@ -222,11 +224,33 @@ def build_site_lookup(chunks: Dict[str, Any]) -> Dict[int, str]:
                     for item in group['items']:
                         if isinstance(item, dict) and 'site' in item:
                             site = item['site']
-                            if isinstance(site, dict) and 'id' in site and 'name' in site:
-                                lookup[site['id']] = site['name']
+                            if isinstance(site, dict) and 'id' in site:
+                                lookup[site['id']] = site
             if lookup:
                 return lookup
     return {}
+
+def save_site_lookup(site_lookup: Dict[int, dict]):
+    """Save site lookup to sites.json (minified)."""
+    sites_file = "sites.json"
+    # Convert to list of objects (sorted by id) for easier consumption
+    sites_list = []
+    for sid, site in site_lookup.items():
+        # Extract only the fields we want (id, code, name, shortName, address, etc.)
+        # Keep it minimal but include key info.
+        sites_list.append({
+            "id": site.get("id"),
+            "code": site.get("code"),
+            "name": site.get("name"),
+            "shortName": site.get("shortName"),
+            "address": site.get("address"),
+            "hktaName": site.get("hktaName"),
+            "hktaCode": site.get("hktaCode")
+        })
+    sites_list.sort(key=lambda x: x.get("id", 0))
+    with open(sites_file, "w", encoding="utf-8") as f:
+        json.dump(sites_list, f, separators=(',', ':'), ensure_ascii=False)
+    print(f"💾 Saved site lookup to {sites_file}")
 
 def get_shows_array(chunks: Dict[str, Any]) -> Optional[List[dict]]:
     for chunk_id, data in chunks.items():
@@ -250,12 +274,13 @@ def get_movie_name_from_show(show: dict, chunks: Dict[str, Any],
         return movie_lookup[movie_id].get("name", f"Movie {movie_id}")
     return f"Movie {movie_id if movie_id is not None else 'unknown'}"
 
-def fetch_and_parse() -> Tuple[Dict[str, Dict[str, List[Tuple[int, int, str, int, int, int]]]], Dict[int, dict]]:
+def fetch_and_parse() -> Tuple[Dict[str, Dict[str, List[Tuple[int, int, str, int, int, int]]]], Dict[int, dict], Dict[int, dict]]:
     """
     Fetch and parse all shows.
     Returns:
       - shows_by_date_movie: dict date (YYYY-MM-DD) -> dict movie_name -> list of (perfIx, siteId, time, total, sold, price)
       - movie_lookup: dict movie_id -> full movie object
+      - site_lookup: dict site_id -> full site object
     """
     html = fetch_html_with_retry()
     print(f"HTML length: {len(html)}")
@@ -305,7 +330,7 @@ def fetch_and_parse() -> Tuple[Dict[str, Dict[str, List[Tuple[int, int, str, int
             print(f"Skipping show due to missing key: {e}")
             continue
 
-    return dict(shows_by_date_movie), movie_lookup
+    return dict(shows_by_date_movie), movie_lookup, site_lookup
 
 # ========== DAILY FILE I/O ==========
 def get_daily_filepath(date_str: str) -> str:
@@ -547,7 +572,7 @@ def update_movie_database(movie_lookup: Dict[int, dict]):
 def main():
     print(f"📅 Processing all dates (based on shows found)")
     try:
-        shows_by_date_movie, movie_lookup = fetch_and_parse()
+        shows_by_date_movie, movie_lookup, site_lookup = fetch_and_parse()
     except Exception as e:
         print(f"❌ Error fetching data: {e}")
         return
@@ -555,6 +580,9 @@ def main():
     if not shows_by_date_movie:
         print("⚠️ No data fetched.")
         return
+
+    # Save site lookup (for venue name resolution)
+    save_site_lookup(site_lookup)
 
     # Save daily files for each date found
     for date_str, movie_data in shows_by_date_movie.items():
