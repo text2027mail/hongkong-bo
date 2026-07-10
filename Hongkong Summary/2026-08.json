@@ -127,11 +127,75 @@
       }
     }
   },
+  "4DX Spider-Man: Brand New Day": {
+    "shows": 38,
+    "seats": 2873,
+    "sold": 226,
+    "gross": 43310,
+    "dates": {
+      "2026-08-01": {
+        "shows": 11,
+        "seats": 986,
+        "sold": 120,
+        "gross": 23020
+      },
+      "2026-08-03": {
+        "shows": 6,
+        "seats": 381,
+        "sold": 22,
+        "gross": 4230
+      },
+      "2026-08-05": {
+        "shows": 5,
+        "seats": 260,
+        "sold": 0,
+        "gross": 0
+      },
+      "2026-08-02": {
+        "shows": 11,
+        "seats": 986,
+        "sold": 82,
+        "gross": 15710
+      },
+      "2026-08-04": {
+        "shows": 5,
+        "seats": 260,
+        "sold": 2,
+        "gross": 350
+      }
+    }
+  },
+  "Movie 1012": {
+    "shows": 13,
+    "seats": 2626,
+    "sold": 94,
+    "gross": 12910,
+    "dates": {
+      "2026-08-01": {
+        "shows": 6,
+        "seats": 1212,
+        "sold": 58,
+        "gross": 8020
+      },
+      "2026-08-03": {
+        "shows": 1,
+        "seats": 202,
+        "sold": 0,
+        "gross": 0
+      },
+      "2026-08-02": {
+        "shows": 6,
+        "seats": 1212,
+        "sold": 36,
+        "gross": 4890
+      }
+    }
+  },
   "Movie 1052": {
     "shows": 25,
     "seats": 7250,
-    "sold": 94,
-    "gross": 10670,
+    "sold": 95,
+    "gross": 10790,
     "dates": {
       "2026-08-01": {
         "shows": 5,
@@ -142,8 +206,8 @@
       "2026-08-03": {
         "shows": 5,
         "seats": 1450,
-        "sold": 16,
-        "gross": 1920
+        "sold": 17,
+        "gross": 2040
       },
       "2026-08-05": {
         "shows": 5,
@@ -206,8 +270,8 @@
   "Spider-Man: Brand New Day": {
     "shows": 25,
     "seats": 6825,
-    "sold": 76,
-    "gross": 9255,
+    "sold": 80,
+    "gross": 9745,
     "dates": {
       "2026-08-01": {
         "shows": 5,
@@ -230,72 +294,14 @@
       "2026-08-02": {
         "shows": 5,
         "seats": 1365,
-        "sold": 6,
-        "gross": 780
+        "sold": 8,
+        "gross": 1040
       },
       "2026-08-04": {
         "shows": 5,
         "seats": 1365,
-        "sold": 31,
-        "gross": 3565
-      }
-    }
-  },
-  "4DX Spider-Man: Brand New Day": {
-    "shows": 37,
-    "seats": 2752,
-    "sold": 225,
-    "gross": 43115,
-    "dates": {
-      "2026-08-01": {
-        "shows": 11,
-        "seats": 986,
-        "sold": 120,
-        "gross": 23020
-      },
-      "2026-08-03": {
-        "shows": 5,
-        "seats": 260,
-        "sold": 21,
-        "gross": 4035
-      },
-      "2026-08-05": {
-        "shows": 5,
-        "seats": 260,
-        "sold": 0,
-        "gross": 0
-      },
-      "2026-08-02": {
-        "shows": 11,
-        "seats": 986,
-        "sold": 82,
-        "gross": 15710
-      },
-      "2026-08-04": {
-        "shows": 5,
-        "seats": 260,
-        "sold": 2,
-        "gross": 350
-      }
-    }
-  },
-  "Movie 1012": {
-    "shows": 12,
-    "seats": 2424,
-    "sold": 96,
-    "gross": 13190,
-    "dates": {
-      "2026-08-01": {
-        "shows": 6,
-        "seats": 1212,
-        "sold": 60,
-        "gross": 8300
-      },
-      "2026-08-02": {
-        "shows": 6,
-        "seats": 1212,
-        "sold": 36,
-        "gross": 4890
+        "sold": 33,
+        "gross": 3795
       }
     }
   },
