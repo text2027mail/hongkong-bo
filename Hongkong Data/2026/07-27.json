@@ -1,0 +1,58 @@
+[
+  {
+    "perfIx": 124811,
+    "movie": "Monster",
+    "venue": "Cinema.com.hk",
+    "date": "2026-07-27",
+    "time": "07:00",
+    "total": 119,
+    "available": 112,
+    "blocked": 0,
+    "sold": 7,
+    "gross": 665,
+    "price": 95,
+    "last_updated": "2026-07-10 11:53:36 AM IST"
+  },
+  {
+    "perfIx": 117332,
+    "movie": "CHARACTER (bcSunday)",
+    "venue": "Cinema.com.hk",
+    "date": "2026-07-27",
+    "time": "11:00",
+    "total": 88,
+    "available": 78,
+    "blocked": 0,
+    "sold": 10,
+    "gross": 950,
+    "price": 95,
+    "last_updated": "2026-07-10 11:53:36 AM IST"
+  },
+  {
+    "perfIx": 120993,
+    "movie": "Mr. Nobody Against Putin (EADF2026) ",
+    "venue": "Cinema.com.hk",
+    "date": "2026-07-27",
+    "time": "11:25",
+    "total": 119,
+    "available": 37,
+    "blocked": 0,
+    "sold": 82,
+    "gross": 7790,
+    "price": 95,
+    "last_updated": "2026-07-10 11:53:36 AM IST"
+  },
+  {
+    "perfIx": 120994,
+    "movie": "A Fox Under a Pink Moon (EADF2026) ",
+    "venue": "Cinema.com.hk",
+    "date": "2026-07-27",
+    "time": "13:50",
+    "total": 119,
+    "available": 108,
+    "blocked": 0,
+    "sold": 11,
+    "gross": 1045,
+    "price": 95,
+    "last_updated": "2026-07-10 11:53:36 AM IST"
+  }
+]

@@ -1,0 +1,30 @@
+{
+  "Hidden Heroes (APAAA)": {
+    "shows": 1,
+    "seats": 119,
+    "sold": 18,
+    "gross": 2700,
+    "dates": {
+      "2026-12-07": {
+        "shows": 1,
+        "seats": 119,
+        "sold": 18,
+        "gross": 2700
+      }
+    }
+  },
+  "Swan Lake (Paris Opera Ballet 2026 - 2027) ": {
+    "shows": 1,
+    "seats": 81,
+    "sold": 10,
+    "gross": 1600,
+    "dates": {
+      "2026-12-13": {
+        "shows": 1,
+        "seats": 81,
+        "sold": 10,
+        "gross": 1600
+      }
+    }
+  }
+}

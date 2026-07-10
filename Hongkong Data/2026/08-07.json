@@ -1,0 +1,44 @@
+[
+  {
+    "perfIx": 121074,
+    "movie": "My Word Against Mine (EADF2026) ",
+    "venue": "Cinema.com.hk",
+    "date": "2026-08-07",
+    "time": "11:30",
+    "total": 127,
+    "available": 112,
+    "blocked": 0,
+    "sold": 15,
+    "gross": 1425,
+    "price": 95,
+    "last_updated": "2026-07-10 11:53:36 AM IST"
+  },
+  {
+    "perfIx": 121005,
+    "movie": "Bestiari, Erbari, Lapidari (EADF2026) ",
+    "venue": "Cinema.com.hk",
+    "date": "2026-08-07",
+    "time": "12:00",
+    "total": 119,
+    "available": 110,
+    "blocked": 0,
+    "sold": 9,
+    "gross": 1305,
+    "price": 145,
+    "last_updated": "2026-07-10 11:53:36 AM IST"
+  },
+  {
+    "perfIx": 123886,
+    "movie": "ATEEZ : LIGHT THE WAY IN CINEMAS (2026)  ",
+    "venue": "Cinema.com.hk",
+    "date": "2026-08-07",
+    "time": "13:40",
+    "total": 127,
+    "available": 62,
+    "blocked": 0,
+    "sold": 65,
+    "gross": 5850,
+    "price": 90,
+    "last_updated": "2026-07-10 11:53:36 AM IST"
+  }
+]

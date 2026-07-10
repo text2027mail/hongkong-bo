@@ -1,0 +1,58 @@
+[
+  {
+    "perfIx": 116939,
+    "movie": "Sound of Falling",
+    "venue": "Cinema.com.hk",
+    "date": "2026-07-14",
+    "time": "06:30",
+    "total": 119,
+    "available": 108,
+    "blocked": 0,
+    "sold": 11,
+    "gross": 1045,
+    "price": 95,
+    "last_updated": "2026-07-10 11:53:36 AM IST"
+  },
+  {
+    "perfIx": 113252,
+    "movie": "Down by Law",
+    "venue": "Cinema.com.hk",
+    "date": "2026-07-14",
+    "time": "09:45",
+    "total": 119,
+    "available": 102,
+    "blocked": 0,
+    "sold": 17,
+    "gross": 1615,
+    "price": 95,
+    "last_updated": "2026-07-10 11:53:36 AM IST"
+  },
+  {
+    "perfIx": 113911,
+    "movie": "About Time (SoL)",
+    "venue": "Cinema.com.hk",
+    "date": "2026-07-14",
+    "time": "11:30",
+    "total": 202,
+    "available": 12,
+    "blocked": 0,
+    "sold": 190,
+    "gross": 20900,
+    "price": 110,
+    "last_updated": "2026-07-10 11:53:36 AM IST"
+  },
+  {
+    "perfIx": 113268,
+    "movie": "Permanent Vacation",
+    "venue": "Cinema.com.hk",
+    "date": "2026-07-14",
+    "time": "11:50",
+    "total": 119,
+    "available": 88,
+    "blocked": 0,
+    "sold": 31,
+    "gross": 2945,
+    "price": 95,
+    "last_updated": "2026-07-10 11:53:36 AM IST"
+  }
+]
