@@ -155,7 +155,7 @@ def build_site_lookup(chunks):
                     lookup[site['id']] = site['name']
             if lookup:
                 return lookup
-    # Fallback to siteGroups
+    # fallback to siteGroups
     for chunk_id, data in chunks.items():
         groups = find_key(data, 'siteGroups')
         if groups and isinstance(groups, list):
@@ -177,19 +177,22 @@ def parse_shows_from_array(shows_array, chunks, movie_lookup, site_lookup):
     for show in shows_array:
         try:
             show_id = show["id"]
-            # Convert UTC time to Hong Kong local time
+            # Convert UTC to HK time
             time_str = show["time"]
             utc_dt = datetime.fromisoformat(time_str.replace('Z', '+00:00'))
             hk_dt = utc_dt.astimezone(HK_TZ)
             date = hk_dt.strftime('%Y-%m-%d')
-            # Use 12-hour clock with AM/PM to match site
-            time_hm = hk_dt.strftime('%I:%M %p').lstrip('0')  # e.g., "12:00 am"
+            time_hm = hk_dt.strftime('%I:%M %p').lstrip('0')
 
             price = show["price"]
             seats = show["seats"]
             sold = show["sold"]
 
-            # Movie
+            # Debug for the problematic show
+            if show_id == 124082:
+                print(f"DEBUG show {show_id}: sold={sold}, avaliable={show.get('avaliable')}")
+
+            # Movie name
             movie_obj = show.get("movie")
             if isinstance(movie_obj, str) and movie_obj.startswith('$'):
                 movie_obj = resolve_reference(movie_obj, chunks)
@@ -204,7 +207,7 @@ def parse_shows_from_array(shows_array, chunks, movie_lookup, site_lookup):
                 else:
                     movie_name = f"Movie {movie_id if movie_id is not None else 'unknown'}"
 
-            # Venue
+            # Venue name
             site_obj = show.get("site", {})
             site_id = site_obj.get("id")
             venue = site_lookup.get(site_id, f"Site {site_id}") if site_id is not None else "Cinema.com.hk"
@@ -216,7 +219,7 @@ def parse_shows_from_array(shows_array, chunks, movie_lookup, site_lookup):
                 "date": date,
                 "time": time_hm,
                 "total": seats,
-                "available": seats - sold,
+                "available": seats - sold,       # compute from sold
                 "blocked": 0,
                 "sold": sold,
                 "gross": sold * price,
@@ -241,19 +244,9 @@ def save_daily(shows):
         os.makedirs(path, exist_ok=True)
 
         file = f"{path}/{mmdd}.json"
-        if os.path.exists(file):
-            with open(file, "r") as f:
-                old = json.load(f)
-        else:
-            old = []
-
-        index = {d["perfIx"]: d for d in old}
-        for s in data:
-            index[s["perfIx"]] = s
-
-        merged = list(index.values())
+        # Overwrite to avoid stale data
         with open(file, "w") as f:
-            json.dump(merged, f, indent=2)
+            json.dump(data, f, indent=2)
         print("Saved:", file)
 
 
@@ -359,18 +352,26 @@ def main():
     site_lookup = build_site_lookup(chunks)
     print(f"Found {len(site_lookup)} unique venues.")
 
+    # Find the shows array
     shows_array = None
+    used_chunk = None
     for chunk_id, data in chunks.items():
         shows = find_key(data, 'shows')
         if shows is not None:
             shows_array = shows
+            used_chunk = chunk_id
             break
 
     if shows_array is None:
         print("Could not find 'shows' array in any chunk.")
         return
 
-    print(f"Found shows array with {len(shows_array)} entries.")
+    print(f"Using shows array from chunk {used_chunk} with {len(shows_array)} entries.")
+    # Debug: print sold for show 124082 if present
+    for s in shows_array:
+        if s.get("id") == 124082:
+            print(f"DEBUG from array: id=124082 sold={s.get('sold')}, avaliable={s.get('avaliable')}")
+
     shows = parse_shows_from_array(shows_array, chunks, movie_lookup, site_lookup)
     print("Shows scraped:", len(shows))
 
