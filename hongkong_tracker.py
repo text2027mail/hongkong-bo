@@ -1,6 +1,7 @@
 import requests
 import json
 import os
+import re
 from datetime import datetime
 from zoneinfo import ZoneInfo
 from collections import defaultdict
@@ -38,7 +39,7 @@ def fetch_page():
 def extract_all_flight_strings(html):
     """
     Find all self.__next_f.push([1, " ... ") calls and extract the raw string content.
-    Returns a list of decoded strings.
+    Returns a list of (chunk_id, decoded_string) tuples.
     """
     results = []
     pattern = 'self.__next_f.push([1,'
@@ -66,12 +67,75 @@ def extract_all_flight_strings(html):
         raw = html[quote_start+1:end]
         try:
             decoded = json.loads('"' + raw + '"')
+            # Try to extract the chunk ID from the push call
+            # The call is self.__next_f.push([1, "..."), so the first argument is 1
+            # but we don't really need it; we'll just store the decoded string.
             results.append(decoded)
         except json.JSONDecodeError:
-            # If decoding fails, we still store the raw string for inspection
-            results.append(raw)
+            # If decoding fails, skip
+            pass
         start_pos = end + 1
     return results
+
+
+def parse_payloads(payload_strings):
+    """
+    Parse all payload strings into a single dictionary mapping chunk ID to parsed data.
+    Each payload string contains multiple lines like "5:...".
+    """
+    chunks = {}
+    for payload in payload_strings:
+        lines = payload.split('\n')
+        for line in lines:
+            line = line.strip()
+            if not line:
+                continue
+            colon_idx = line.find(':')
+            if colon_idx == -1:
+                continue
+            chunk_id = line[:colon_idx]
+            data_str = line[colon_idx+1:]
+            try:
+                parsed = json.loads(data_str)
+                chunks[chunk_id] = parsed
+            except json.JSONDecodeError:
+                continue
+    return chunks
+
+
+def resolve_reference(ref, chunks, root_data=None):
+    """
+    Resolve a reference string like "$5:1:props:children:props:movies:30".
+    If root_data is provided, it will be used as the starting point; otherwise, the chunk with the ID is used.
+    """
+    if not isinstance(ref, str) or not ref.startswith('$'):
+        return ref
+    # Remove the leading '$'
+    path = ref[1:]
+    parts = path.split(':')
+    if not parts:
+        return ref
+    # First part is chunk ID
+    chunk_id = parts[0]
+    if chunk_id in chunks:
+        data = chunks[chunk_id]
+    elif root_data is not None:
+        data = root_data
+    else:
+        return ref
+    # Now traverse the rest of the path
+    for key in parts[1:]:
+        if isinstance(data, dict) and key in data:
+            data = data[key]
+        elif isinstance(data, list) and key.isdigit():
+            idx = int(key)
+            if idx < len(data):
+                data = data[idx]
+            else:
+                return ref
+        else:
+            return ref
+    return data
 
 
 def find_shows(data):
@@ -94,37 +158,7 @@ def find_shows(data):
     return None
 
 
-def parse_flight_payloads(payload_strings):
-    """
-    Given a list of decoded flight strings, parse each and search for the shows array.
-    Returns the shows array if found, else None.
-    """
-    for idx, payload in enumerate(payload_strings):
-        # If it's a string that looks like JSON (starts with '{' or '['), try to parse it
-        # Otherwise, it might be a multi-line chunk? Actually, we already decoded it,
-        # so it should be a proper string that may contain multiple lines.
-        # We'll split by newline and parse each line as before.
-        lines = payload.split('\n')
-        for line in lines:
-            line = line.strip()
-            if not line:
-                continue
-            colon_idx = line.find(':')
-            if colon_idx == -1:
-                continue
-            data_str = line[colon_idx+1:]
-            try:
-                parsed = json.loads(data_str)
-            except json.JSONDecodeError:
-                continue
-            shows = find_shows(parsed)
-            if shows is not None:
-                print(f"Found shows in chunk with ID {line[:colon_idx]}")
-                return shows
-    return None
-
-
-def parse_shows_from_array(shows_array):
+def parse_shows_from_array(shows_array, chunks):
     shows = []
     for show in shows_array:
         try:
@@ -134,11 +168,25 @@ def parse_shows_from_array(shows_array):
             price = show["price"]
             seats = show["seats"]
             sold = show["sold"]
-            movie = show["movie"]["name"]
+            movie_obj = show.get("movie")
+            # If movie is a reference string, resolve it
+            if isinstance(movie_obj, str) and movie_obj.startswith('$'):
+                movie_obj = resolve_reference(movie_obj, chunks)
+            # Now movie_obj should be a dict
+            if not isinstance(movie_obj, dict):
+                print(f"Warning: movie_obj is not a dict for show {show_id}: {movie_obj}")
+                continue
+            movie_name = movie_obj.get("name")
+            if not movie_name:
+                # Try to get name from a 'name_lang' or similar
+                # Fallback: use ID or skip
+                print(f"Warning: movie name missing for show {show_id}, movie_obj keys: {movie_obj.keys()}")
+                # You could skip, but we'll use a placeholder
+                movie_name = f"Movie {movie_obj.get('id', 'unknown')}"
             venue = show.get("site", {}).get("name", "Cinema.com.hk")
             shows.append({
                 "perfIx": show_id,
-                "movie": movie,
+                "movie": movie_name,
                 "venue": venue,
                 "date": date,
                 "time": time,
@@ -273,20 +321,28 @@ def main():
 
     all_strings = extract_all_flight_strings(html)
     print(f"Found {len(all_strings)} flight strings.")
-    
-    # Optionally, we could filter to the largest one, but we'll just search all.
-    shows_array = parse_flight_payloads(all_strings)
+
+    if not all_strings:
+        print("No flight strings extracted.")
+        return
+
+    chunks = parse_payloads(all_strings)
+    print(f"Parsed {len(chunks)} chunks.")
+
+    # Find the shows array in any chunk
+    shows_array = None
+    for chunk_id, data in chunks.items():
+        shows = find_shows(data)
+        if shows is not None:
+            shows_array = shows
+            break
+
     if shows_array is None:
-        print("Could not find 'shows' array in any flight payload.")
-        # Save the first flight string for inspection
-        if all_strings:
-            with open("payload.txt", "w", encoding="utf-8") as f:
-                f.write(all_strings[0])
-            print("Saved first payload to payload.txt for inspection.")
+        print("Could not find 'shows' array in any chunk.")
         return
 
     print(f"Found shows array with {len(shows_array)} entries.")
-    shows = parse_shows_from_array(shows_array)
+    shows = parse_shows_from_array(shows_array, chunks)
     print("Shows scraped:", len(shows))
 
     if shows:
